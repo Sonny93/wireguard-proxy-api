@@ -29,3 +29,4 @@ declare module '@adonisjs/inertia/types' {
 		import('@adonisjs/inertia/types').InferSharedProps<InertiaMiddleware>;
 	export interface SharedProps extends MiddlewareSharedProps {}
 }
+
