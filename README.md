@@ -1,6 +1,25 @@
-### Adonis + React + UnoCSS Template
+### Wireguard Proxy API
 
-Simple template to quickly start a project with:
+`wireguard-proxy-api` is a project that allows you to start and manage as many WireGuard proxies as there are configuration files in the `/storage/configs/*.conf` directory.
+
+## WebApp
+
+The frontend, accessible after authentication, allows you to:
+
+- upload WireGuard configuration files
+- start and stop WireGuard proxies
+- view WireGuard proxy logs
+- view WireGuard proxy stats
+
+## API
+
+There must be an API endpoint usable by shell scripts:
+
+- `GET /api/proxies`: list available proxies
+
+## Infra
+
+The proxies must run in Docker containers.
 
 #### Technologies
 
