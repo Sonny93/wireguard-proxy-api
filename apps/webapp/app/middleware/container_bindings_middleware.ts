@@ -10,4 +10,3 @@ export default class ContainerBindingsMiddleware {
 		return next();
 	}
 }
-

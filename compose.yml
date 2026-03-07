@@ -9,7 +9,7 @@ services:
       - POSTGRES_PASSWORD=${DB_PASSWORD}
     healthcheck:
       test:
-        ['CMD-SHELL', 'pg_isready', '-U', '${DB_USER}', '-d', '${DB_DATABASE}']
+        ["CMD-SHELL", "pg_isready", "-U", "${DB_USER}", "-d", "${DB_DATABASE}"]
       interval: 30s
       timeout: 5s
       retries: 10
@@ -18,7 +18,7 @@ services:
     volumes:
       - postgres-volume:/var/lib/postgresql
     ports:
-      - '${DB_PORT}:5432'
+      - "${DB_PORT}:5432"
 
   # redis:
   #   restart: always
@@ -38,13 +38,13 @@ services:
   app:
     restart: always
     build:
-      context: .
+      context: apps/webapp
     environment:
       - DB_HOST=postgres
       - HOST=0.0.0.0
       - NODE_ENV=production
     env_file:
-      - .env
+      - apps/webapp/.env
     depends_on:
       postgres:
         condition: service_healthy

@@ -35,4 +35,8 @@ export default await Env.create(new URL('../', import.meta.url), {
 	DB_USER: Env.schema.string(),
 	DB_PASSWORD: Env.schema.string.optional(),
 	DB_DATABASE: Env.schema.string(),
+
+	STORAGE_CONFIGS_PATH: Env.schema.string.optional(),
+
+	DRIVE_DISK: Env.schema.enum(['fs'] as const),
 });

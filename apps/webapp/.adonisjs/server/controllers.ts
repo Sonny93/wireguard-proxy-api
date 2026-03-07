@@ -3,4 +3,7 @@
  * DO NOT EDIT manually
  */
 
-export const controllers = {}
+export const controllers = {
+  Configs: () => import('#controllers/configs_controller'),
+  Sessions: () => import('#controllers/sessions_controller'),
+}
