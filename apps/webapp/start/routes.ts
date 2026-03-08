@@ -21,6 +21,24 @@ router
 		router
 			.post('/proxies/test', [controllers.proxy.TestProxy, 'execute'])
 			.as('proxies.test');
+		router
+			.post('/proxies/restart', [controllers.proxy.RestartProxy, 'execute'])
+			.as('proxies.restart');
+		router
+			.post('/proxies/start-all', [
+				controllers.proxy.StartAllProxies,
+				'execute',
+			])
+			.as('proxies.startAll');
+		router
+			.post('/proxies/stop-all', [controllers.proxy.StopAllProxies, 'execute'])
+			.as('proxies.stopAll');
+		router
+			.post('/proxies/restart-all', [
+				controllers.proxy.RestartAllProxies,
+				'execute',
+			])
+			.as('proxies.restartAll');
 
 		router.post('/logout', [controllers.Sessions, 'destroy']).as('logout');
 	})

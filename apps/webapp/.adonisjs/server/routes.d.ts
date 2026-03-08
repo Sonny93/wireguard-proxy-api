@@ -10,6 +10,10 @@ export type ScannedRoutes = {
     'proxies.start': { paramsTuple?: []; params?: {} }
     'proxies.stop': { paramsTuple?: []; params?: {} }
     'proxies.test': { paramsTuple?: []; params?: {} }
+    'proxies.restart': { paramsTuple?: []; params?: {} }
+    'proxies.startAll': { paramsTuple?: []; params?: {} }
+    'proxies.stopAll': { paramsTuple?: []; params?: {} }
+    'proxies.restartAll': { paramsTuple?: []; params?: {} }
     'logout': { paramsTuple?: []; params?: {} }
     'login': { paramsTuple?: []; params?: {} }
     'login.store': { paramsTuple?: []; params?: {} }
@@ -29,6 +33,10 @@ export type ScannedRoutes = {
     'proxies.start': { paramsTuple?: []; params?: {} }
     'proxies.stop': { paramsTuple?: []; params?: {} }
     'proxies.test': { paramsTuple?: []; params?: {} }
+    'proxies.restart': { paramsTuple?: []; params?: {} }
+    'proxies.startAll': { paramsTuple?: []; params?: {} }
+    'proxies.stopAll': { paramsTuple?: []; params?: {} }
+    'proxies.restartAll': { paramsTuple?: []; params?: {} }
     'logout': { paramsTuple?: []; params?: {} }
     'login.store': { paramsTuple?: []; params?: {} }
   }

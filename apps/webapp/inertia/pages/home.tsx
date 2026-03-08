@@ -46,6 +46,22 @@ const Home = ({ configs, activeProxies = [], errors = {} }: HomeProps) => {
 		router.post('/proxies/stop', { configName }, { preserveScroll: true });
 	};
 
+	const restartProxy = (configName: string) => {
+		router.post('/proxies/restart', { configName }, { preserveScroll: true });
+	};
+
+	const startAll = () => {
+		router.post('/proxies/start-all', {}, { preserveScroll: true });
+	};
+
+	const stopAll = () => {
+		router.post('/proxies/stop-all', {}, { preserveScroll: true });
+	};
+
+	const restartAll = () => {
+		router.post('/proxies/restart-all', {}, { preserveScroll: true });
+	};
+
 	const getCsrfToken = (): string | null => {
 		const match = document.cookie.match(/XSRF-TOKEN=([^;]+)/);
 		return match ? decodeURIComponent(match[1]) : null;
@@ -124,9 +140,24 @@ const Home = ({ configs, activeProxies = [], errors = {} }: HomeProps) => {
 					</Button>
 				</form>
 				<div>
-					<h2 className="mb-2 text-lg font-medium text-gray-900 dark:text-white">
-						Stored configs & proxy workers
-					</h2>
+					<div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+						<h2 className="text-lg font-medium text-gray-900 dark:text-white">
+							Stored configs & proxy workers
+						</h2>
+						{configs.length > 0 && (
+							<div className="flex flex-wrap gap-2">
+								<Button type="button" variant="primary" onClick={startAll}>
+									Start all
+								</Button>
+								<Button type="button" variant="secondary" onClick={restartAll}>
+									Restart all
+								</Button>
+								<Button type="button" variant="danger" onClick={stopAll}>
+									Stop all
+								</Button>
+							</div>
+						)}
+					</div>
 					{configs.length === 0 ? (
 						<p className="text-gray-500 dark:text-gray-400">
 							No config files yet.
@@ -157,6 +188,13 @@ const Home = ({ configs, activeProxies = [], errors = {} }: HomeProps) => {
 													{testState.loading && testState.configName === c.name
 														? 'Testing…'
 														: 'Test'}
+												</Button>
+												<Button
+													type="button"
+													onClick={() => restartProxy(c.name)}
+													variant="secondary"
+												>
+													Restart
 												</Button>
 												<Button
 													type="button"
