@@ -54,10 +54,7 @@ async function listContextFiles(contextPath: string): Promise<string[]> {
 	return result;
 }
 
-function extractJsonStringField(
-	body: string,
-	field: string
-): string | null {
+function extractJsonStringField(body: string, field: string): string | null {
 	const start = body.indexOf('{');
 	const end = body.lastIndexOf('}');
 	if (start === -1 || end < start) return null;
@@ -80,10 +77,7 @@ export class ProxyWorkerService {
 	readonly #options: ProxyWorkerOptions;
 	readonly #httpProxyClient: HttpProxyClient;
 
-	constructor(
-		options: ProxyWorkerOptions,
-		httpProxyClient: HttpProxyClient
-	) {
+	constructor(options: ProxyWorkerOptions, httpProxyClient: HttpProxyClient) {
 		this.#options = options;
 		this.#httpProxyClient = httpProxyClient;
 		this.#docker = new Docker(
@@ -107,9 +101,7 @@ export class ProxyWorkerService {
 			all: false,
 			filters: { ancestor: [this.#options.imageName] },
 		});
-		return Promise.all(
-			containers.map((c) => this.#containerToActiveProxy(c))
-		);
+		return Promise.all(containers.map((c) => this.#containerToActiveProxy(c)));
 	}
 
 	async testProxy(configName: string): Promise<TestProxyResult> {
@@ -140,10 +132,7 @@ export class ProxyWorkerService {
 		await fs.access(configPath);
 		const existing = await this.#findContainersByName(name);
 		if (existing.length > 0) {
-			const running = await this.#reuseOrRemoveExisting(
-				existing[0],
-				name
-			);
+			const running = await this.#reuseOrRemoveExisting(existing[0], name);
 			if (running) return running;
 		}
 		return this.#createAndStartContainer(name, configPath, configFileName);
@@ -205,9 +194,7 @@ export class ProxyWorkerService {
 		return vpnMount ? path.basename(vpnMount.Source) : '';
 	}
 
-	async #containerToActiveProxy(
-		c: Docker.ContainerInfo
-	): Promise<ActiveProxy> {
+	async #containerToActiveProxy(c: Docker.ContainerInfo): Promise<ActiveProxy> {
 		const name = c.Names?.[0]?.replace(/^\//, '') ?? c.Id;
 		const port =
 			c.Ports?.find((p) => p.PrivatePort === PROXY_PORT)?.PublicPort ??
@@ -221,9 +208,7 @@ export class ProxyWorkerService {
 		return active.find((p) => p.configFile === configName) ?? null;
 	}
 
-	async #findContainersByName(
-		name: string
-	): Promise<Docker.ContainerInfo[]> {
+	async #findContainersByName(name: string): Promise<Docker.ContainerInfo[]> {
 		return this.#docker.listContainers({
 			all: true,
 			filters: { name: [name] },
@@ -235,12 +220,10 @@ export class ProxyWorkerService {
 		name: string
 	): Promise<ActiveProxy | null> {
 		if (existing.State === 'running') {
-			const configFile = await this.#getConfigFileFromContainer(
-				existing.Id
-			);
+			const configFile = await this.#getConfigFileFromContainer(existing.Id);
 			const port =
-				existing.Ports?.find((p) => p.PrivatePort === PROXY_PORT)
-					?.PublicPort ?? PROXY_PORT;
+				existing.Ports?.find((p) => p.PrivatePort === PROXY_PORT)?.PublicPort ??
+				PROXY_PORT;
 			return { id: existing.Id, name, configFile, port };
 		}
 		const c = this.#docker.getContainer(existing.Id);

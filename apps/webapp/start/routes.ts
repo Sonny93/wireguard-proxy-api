@@ -8,8 +8,10 @@ router
 
 router
 	.group(() => {
-		router.get('/', [controllers.Configs, 'index']).as('home');
-		router.post('/configs', [controllers.Configs, 'store']).as('configs.store');
+		router.get('/', [controllers.config.ShowConfigs, 'render']).as('home');
+		router
+			.post('/configs', [controllers.config.UploadConfig, 'execute'])
+			.as('configs.store');
 		router
 			.post('/proxies/start', [controllers.proxy.StartProxy, 'execute'])
 			.as('proxies.start');

@@ -42,9 +42,8 @@ export class HttpProxyClient {
 				sock.destroy();
 			};
 
-			sock = net.connect(
-				{ host: proxyHost, port: proxyPort },
-				() => sock.write(request)
+			sock = net.connect({ host: proxyHost, port: proxyPort }, () =>
+				sock.write(request)
 			);
 
 			sock.on('error', (err) => {

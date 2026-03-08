@@ -9,7 +9,10 @@ export const controllers = {
       GetProxies: () => import('#controllers/api/proxy/get_proxies_controller'),
     },
   },
-  Configs: () => import('#controllers/configs_controller'),
+  config: {
+    ShowConfigs: () => import('#controllers/config/show_configs_controller'),
+    UploadConfig: () => import('#controllers/config/upload_config_controller'),
+  },
   proxy: {
     StartProxy: () => import('#controllers/proxy/start_proxy_controller'),
     StopProxy: () => import('#controllers/proxy/stop_proxy_controller'),
