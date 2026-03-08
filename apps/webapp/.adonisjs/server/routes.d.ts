@@ -5,6 +5,7 @@ type ParamValue = string | number | bigint | boolean
 export type ScannedRoutes = {
   ALL: {
     'api.proxies.index': { paramsTuple?: []; params?: {} }
+    'proxy.initializing': { paramsTuple?: []; params?: {} }
     'home': { paramsTuple?: []; params?: {} }
     'configs.store': { paramsTuple?: []; params?: {} }
     'proxies.start': { paramsTuple?: []; params?: {} }
@@ -20,11 +21,13 @@ export type ScannedRoutes = {
   }
   GET: {
     'api.proxies.index': { paramsTuple?: []; params?: {} }
+    'proxy.initializing': { paramsTuple?: []; params?: {} }
     'home': { paramsTuple?: []; params?: {} }
     'login': { paramsTuple?: []; params?: {} }
   }
   HEAD: {
     'api.proxies.index': { paramsTuple?: []; params?: {} }
+    'proxy.initializing': { paramsTuple?: []; params?: {} }
     'home': { paramsTuple?: []; params?: {} }
     'login': { paramsTuple?: []; params?: {} }
   }

@@ -1,4 +1,4 @@
-import { ProxyWorkerService } from '#services/proxy_worker_service';
+import { ProxyWorkerService } from '@wireguard-proxy/core';
 import { actionProxyValidator } from '#validators/proxy';
 import { inject } from '@adonisjs/core';
 import { HttpContext } from '@adonisjs/core/http';

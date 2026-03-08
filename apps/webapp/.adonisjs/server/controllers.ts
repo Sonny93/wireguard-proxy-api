@@ -14,6 +14,7 @@ export const controllers = {
     UploadConfig: () => import('#controllers/config/upload_config_controller'),
   },
   proxy: {
+    Initializing: () => import('#controllers/proxy/initializing_controller'),
     RestartAllProxies: () => import('#controllers/proxy/restart_all_proxies_controller'),
     RestartProxy: () => import('#controllers/proxy/restart_proxy_controller'),
     StartAllProxies: () => import('#controllers/proxy/start_all_proxies_controller'),

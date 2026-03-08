@@ -1,0 +1,36 @@
+{
+	"name": "@wireguard-proxy/adonis",
+	"version": "0.0.0",
+	"private": true,
+	"type": "module",
+	"license": "UNLICENSED",
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js",
+			"default": "./dist/index.js"
+		},
+		"./proxy-provider": {
+			"types": "./dist/proxy-provider.d.ts",
+			"import": "./dist/proxy-provider.js",
+			"default": "./dist/proxy-provider.js"
+		}
+	},
+	"scripts": {
+		"build": "tsc",
+		"dev": "tsc --watch"
+	},
+	"dependencies": {
+		"@wireguard-proxy/core": "workspace:*",
+		"@adonisjs/core": "^7.0.0"
+	},
+	"devDependencies": {
+		"@types/node": "^24.10.0",
+		"typescript": "~5.9.3"
+	},
+	"engines": {
+		"node": ">=20"
+	}
+}

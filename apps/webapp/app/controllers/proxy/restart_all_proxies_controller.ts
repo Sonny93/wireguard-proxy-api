@@ -1,5 +1,5 @@
 import { ConfigService } from '#services/config_service';
-import { ProxyWorkerService } from '#services/proxy_worker_service';
+import { ProxyWorkerService } from '@wireguard-proxy/core';
 import { inject } from '@adonisjs/core';
 import { HttpContext } from '@adonisjs/core/http';
 

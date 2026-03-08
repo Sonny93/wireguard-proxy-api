@@ -40,6 +40,13 @@ router.use([
 	() => import('@adonisjs/shield/shield_middleware'),
 	() => import('@adonisjs/auth/initialize_auth_middleware'),
 	() => import('#middleware/silent_auth_middleware'),
+	() =>
+		import('@wireguard-proxy/adonis').then((m) => ({
+			default: m.createProxyImageReadyMiddleware({
+				initializingPath: '/proxy/initializing',
+				skipPaths: ['/login'],
+			}),
+		})),
 ]);
 
 /**

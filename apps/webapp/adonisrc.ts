@@ -1,5 +1,5 @@
-import { defineConfig } from '@adonisjs/core/app';
 import { indexEntities } from '@adonisjs/core';
+import { defineConfig } from '@adonisjs/core/app';
 import { indexPages } from '@adonisjs/inertia';
 
 export default defineConfig({
@@ -43,7 +43,7 @@ export default defineConfig({
   */
 	providers: [
 		() => import('@adonisjs/core/providers/app_provider'),
-		() => import('#providers/proxy_provider'),
+		() => import('@wireguard-proxy/adonis/proxy-provider'),
 		() => import('@adonisjs/core/providers/hash_provider'),
 		{
 			file: () => import('@adonisjs/core/providers/repl_provider'),

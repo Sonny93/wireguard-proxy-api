@@ -7,6 +7,10 @@ router
 	.as('api.proxies.index');
 
 router
+	.get('/proxy/initializing', [controllers.proxy.Initializing, 'render'])
+	.as('proxy.initializing');
+
+router
 	.group(() => {
 		router.get('/', [controllers.config.ShowConfigs, 'render']).as('home');
 		router

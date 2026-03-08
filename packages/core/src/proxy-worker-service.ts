@@ -1,8 +1,9 @@
-import logger from '@adonisjs/core/services/logger';
 import Docker from 'dockerode';
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { HttpProxyClient } from '#services/http_proxy_client';
+import type { Logger } from './logger.js';
+import { noopLogger } from './logger.js';
+import { HttpProxyClient } from './http-proxy-client.js';
 
 const PROXY_PORT = 3128;
 const CONTAINER_NAME_PREFIX = 'proxy-';
@@ -16,6 +17,7 @@ export type ProxyWorkerOptions = {
 	buildContextPath: string;
 	dockerSocketPath?: string;
 	proxyTestHost?: string;
+	logger?: Logger;
 };
 
 export type ActiveProxy = {
@@ -76,22 +78,43 @@ export class ProxyWorkerService {
 	readonly #docker: Docker;
 	readonly #options: ProxyWorkerOptions;
 	readonly #httpProxyClient: HttpProxyClient;
+	readonly #logger: Logger;
+	#ensureImageReadyPromise: Promise<void> | null = null;
 
 	constructor(options: ProxyWorkerOptions, httpProxyClient: HttpProxyClient) {
 		this.#options = options;
 		this.#httpProxyClient = httpProxyClient;
+		this.#logger = options.logger ?? noopLogger;
 		this.#docker = new Docker(
 			options.dockerSocketPath ? { socketPath: options.dockerSocketPath } : {}
 		);
 	}
 
-	async ensureImageReady(): Promise<void> {
+	async isImageReady(): Promise<boolean> {
 		const image = this.#docker.getImage(this.#options.imageName);
 		try {
 			await image.inspect();
-			logger.debug('Image is ready');
+			return true;
 		} catch {
-			logger.debug('Image is not ready, building...');
+			return false;
+		}
+	}
+
+	async ensureImageReady(): Promise<void> {
+		if (this.#ensureImageReadyPromise) return this.#ensureImageReadyPromise;
+		this.#ensureImageReadyPromise = this.#doEnsureImageReady().finally(() => {
+			this.#ensureImageReadyPromise = null;
+		});
+		return this.#ensureImageReadyPromise;
+	}
+
+	async #doEnsureImageReady(): Promise<void> {
+		const image = this.#docker.getImage(this.#options.imageName);
+		try {
+			await image.inspect();
+			this.#logger.debug('Image is ready');
+		} catch {
+			this.#logger.debug('Image is not ready, building...');
 			await this.#buildImage();
 		}
 	}
@@ -110,7 +133,7 @@ export class ProxyWorkerService {
 			return { ok: false, error: 'Proxy not running' };
 		}
 		const proxyHost = this.#options.proxyTestHost ?? '127.0.0.1';
-		logger.debug({ proxyPort: proxy.port }, 'Testing proxy');
+		this.#logger.debug('Testing proxy', { proxyPort: proxy.port });
 		try {
 			const body = await this.#httpProxyClient.get(
 				proxyHost,
@@ -158,14 +181,14 @@ export class ProxyWorkerService {
 		if (src.length === 0) {
 			throw new Error(`Empty build context: ${contextPath}`);
 		}
-		logger.debug('Building image', { count: src.length });
+		this.#logger.debug('Building image', { count: src.length });
 		return new Promise((resolve, reject) => {
 			this.#docker.buildImage(
 				{ context: contextPath, src },
 				{ t: this.#options.imageName },
 				(err, stream) => {
 					if (err) {
-						logger.error('Error building image', { err });
+						this.#logger.error('Error building image', { err });
 						reject(err);
 						return;
 					}
@@ -175,10 +198,10 @@ export class ProxyWorkerService {
 					}
 					this.#docker.modem.followProgress(stream, (err) => {
 						if (err) {
-							logger.error('Error following progress', { err });
+							this.#logger.error('Error following progress', { err });
 							reject(err);
 						} else {
-							logger.debug('Build complete');
+							this.#logger.debug('Build complete');
 							resolve();
 						}
 					});
