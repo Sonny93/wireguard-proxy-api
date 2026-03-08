@@ -9,11 +9,8 @@ export default class StopAllProxiesController {
 	async execute({ response }: HttpContext) {
 		const active = await this.proxyWorkerService.listActive();
 		await Promise.all(
-			active.map((proxy) =>
-				this.proxyWorkerService.stop(proxy.id)
-			)
+			active.map((proxy) => this.proxyWorkerService.stop(proxy.id))
 		);
 		return response.redirect().back();
 	}
 }
-

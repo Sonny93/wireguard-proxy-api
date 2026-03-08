@@ -12,12 +12,9 @@ export default class StartAllProxiesController {
 
 	async execute({ response }: HttpContext) {
 		const configs = await this.configService.getConfigFiles();
-		await Promise.all(
-			configs.map((config) =>
-				this.proxyWorkerService.start(config.name)
-			)
-		);
+		for (const config of configs) {
+			await this.proxyWorkerService.start(config.name);
+		}
 		return response.redirect().back();
 	}
 }
-

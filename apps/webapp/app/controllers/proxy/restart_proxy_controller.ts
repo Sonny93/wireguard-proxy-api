@@ -14,4 +14,3 @@ export default class RestartProxyController {
 		return response.redirect().back();
 	}
 }
-
