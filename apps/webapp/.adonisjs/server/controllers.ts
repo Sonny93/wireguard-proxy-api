@@ -4,6 +4,16 @@
  */
 
 export const controllers = {
+  api: {
+    proxy: {
+      GetProxies: () => import('#controllers/api/proxy/get_proxies_controller'),
+    },
+  },
   Configs: () => import('#controllers/configs_controller'),
+  proxy: {
+    StartProxy: () => import('#controllers/proxy/start_proxy_controller'),
+    StopProxy: () => import('#controllers/proxy/stop_proxy_controller'),
+    TestProxy: () => import('#controllers/proxy/test_proxy_controller'),
+  },
   Sessions: () => import('#controllers/sessions_controller'),
 }

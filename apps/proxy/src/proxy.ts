@@ -46,16 +46,22 @@ function onRequest(
 	const method = clientReq.method ?? "GET";
 	const url = clientReq.url ?? "/";
 
+	const CONNECT_TIMEOUT_MS = 15_000;
+
 	if (method === "CONNECT") {
 		logRequest(method, url, undefined, url);
 		const [host, portStr] = url.split(":");
 		const port = Number.parseInt(portStr ?? "443", 10);
 		const targetSocket = net.connect(port, host, () => {
+			targetSocket.setTimeout(0);
 			clientRes.writeHead(200, { Connection: "keep-alive" });
 			clientRes.end();
 			const clientSocket = clientReq.socket!;
 			clientSocket.pipe(targetSocket);
 			targetSocket.pipe(clientSocket);
+		});
+		targetSocket.setTimeout(CONNECT_TIMEOUT_MS, () => {
+			targetSocket.destroy(new Error("Connection to target timed out"));
 		});
 		targetSocket.on("error", (err) => {
 			if (!clientRes.writableEnded) {
@@ -102,8 +108,13 @@ function onRequest(
 		targetPort === PORT;
 	if (isSelf) {
 		logRequest(method, url, 200, "self");
-		clientRes.writeHead(200, { "Content-Type": "text/plain" });
-		clientRes.end("Proxy is running.");
+		const body = "Proxy is running.";
+		clientRes.writeHead(200, {
+			"Content-Type": "text/plain",
+			"Content-Length": Buffer.byteLength(body),
+			Connection: "keep-alive",
+		});
+		clientRes.end(body);
 		return;
 	}
 	const opts: http.RequestOptions = {
