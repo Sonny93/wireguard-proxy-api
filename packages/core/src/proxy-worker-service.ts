@@ -14,6 +14,7 @@ const TEST_PROXY_TIMEOUT_MS = 15_000;
 export type ProxyWorkerOptions = {
 	imageName: string;
 	configsPath: string;
+	configsHostPath?: string;
 	buildContextPath: string;
 	dockerSocketPath?: string;
 	proxyTestHost?: string;
@@ -158,7 +159,11 @@ export class ProxyWorkerService {
 			const running = await this.#reuseOrRemoveExisting(existing[0], name);
 			if (running) return running;
 		}
-		return this.#createAndStartContainer(name, configPath, configFileName);
+		const bindPath =
+			this.#options.configsHostPath === undefined
+				? configPath
+				: path.join(this.#options.configsHostPath, configFileName);
+		return this.#createAndStartContainer(name, bindPath, configFileName);
 	}
 
 	async stop(containerIdOrName: string): Promise<void> {
@@ -177,6 +182,21 @@ export class ProxyWorkerService {
 
 	async #buildImage(): Promise<void> {
 		const contextPath = this.#options.buildContextPath;
+		try {
+			const stat = await fs.stat(contextPath);
+			if (!stat.isDirectory()) {
+				throw new Error(
+					`Proxy image "${this.#options.imageName}" cannot be built: build context path "${contextPath}" is not a directory. Set PROXY_BUILD_CONTEXT_PATH to the proxy app source (e.g. a volume mount) or build/pull the image beforehand.`
+				);
+			}
+		} catch (err) {
+			if (err && typeof err === 'object' && 'code' in err && err.code === 'ENOENT') {
+				throw new Error(
+					`Proxy image "${this.#options.imageName}" is not present and build context "${contextPath}" does not exist. Set PROXY_BUILD_CONTEXT_PATH to the proxy app source (e.g. a volume mount) or build/pull the image beforehand.`
+				);
+			}
+			throw err;
+		}
 		const src = await listContextFiles(contextPath);
 		if (src.length === 0) {
 			throw new Error(`Empty build context: ${contextPath}`);
@@ -276,7 +296,7 @@ export class ProxyWorkerService {
 
 	async #createAndStartContainer(
 		name: string,
-		configPath: string,
+		hostConfigPath: string,
 		configFileName: string
 	): Promise<ActiveProxy> {
 		const usedPorts = await this.#usedHostPorts();
@@ -298,7 +318,7 @@ export class ProxyWorkerService {
 					'net.ipv6.conf.all.forwarding': '1',
 					'net.ipv4.conf.all.src_valid_mark': '1',
 				},
-				Binds: [`${configPath}:/vpn/wg0.conf:ro`],
+				Binds: [`${hostConfigPath}:/vpn/wg0.conf:ro`],
 				PortBindings: {
 					[`${PROXY_PORT}/tcp`]: [{ HostPort: String(hostPort) }],
 				},

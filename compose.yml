@@ -3,15 +3,18 @@ services:
   app:
     restart: always
     build:
-      context: apps/webapp
+      context: .
+      dockerfile: apps/webapp/Dockerfile
     environment:
       - DB_HOST=
       - HOST=0.0.0.0
       - NODE_ENV=production
+      - PROXY_CONFIGS_HOST_PATH=${PROXY_CONFIGS_HOST_PATH:-${PWD}/storage/configs}
     env_file:
       - apps/webapp/.env
     ports:
-      - ${PORT}:3333
-
-volumes:
-  redis-data:
+      - ${PORT:-3333}:3333
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./apps/webapp/tmp:/app/tmp
+      - ./storage/configs:/app/storage/configs

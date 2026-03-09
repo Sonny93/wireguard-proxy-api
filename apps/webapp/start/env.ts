@@ -18,7 +18,7 @@ export default await Env.create(new URL('../', import.meta.url), {
 
 	STORAGE_CONFIGS_PATH: Env.schema.string.optional(),
 
-	PROXY_IMAGE_NAME: Env.schema.string.optional(),
+	PROXY_CONFIGS_HOST_PATH: Env.schema.string.optional(),
 	PROXY_BUILD_CONTEXT_PATH: Env.schema.string.optional(),
 	DOCKER_SOCKET_PATH: Env.schema.string.optional(),
 	PROXY_TEST_HOST: Env.schema.string.optional(),
