@@ -11,5 +11,8 @@
 		"build:adonis": "pnpm --filter @wireguard-proxy/adonis build",
 		"build:client": "pnpm --filter @wireguard-proxy/client build",
 		"build": "pnpm -r run build"
+	},
+	"devDependencies": {
+		"release-it": "^19.2.4"
 	}
 }
