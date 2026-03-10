@@ -5,6 +5,15 @@ import { middleware } from './kernel.js';
 router
 	.get('/api/proxies', [controllers.api.proxy.GetProxies, 'render'])
 	.as('api.proxies.index');
+router
+	.get('/api/proxies/pick', [controllers.api.proxy.PickProxy, 'handle'])
+	.as('api.proxies.pick');
+router
+	.get('/api/proxies/:configName/test', [
+		controllers.api.proxy.TestProxy,
+		'handle',
+	])
+	.as('api.proxies.test');
 
 router
 	.get('/proxy/initializing', [controllers.proxy.Initializing, 'render'])

@@ -7,12 +7,13 @@ import { loadEnv } from "./env.js";
 const env = loadEnv();
 const { PROXY_PORT: PORT, LOG_LEVEL, LOG_FILE } = env;
 const isProduction = env.NODE_ENV === "production";
+const CONNECT_TIMEOUT_MS = 15_000;
 
 const logger = LOG_FILE
 	? pino(
 			{ level: LOG_LEVEL },
 			pino.destination({ dest: LOG_FILE, append: true, mkdir: true })
-		)
+	  )
 	: pino({
 			level: LOG_LEVEL,
 			...(isProduction
@@ -22,8 +23,8 @@ const logger = LOG_FILE
 							target: "pino-pretty",
 							options: { colorize: true },
 						},
-					}),
-		});
+				  }),
+	  });
 
 function logRequest(
 	method: string,
@@ -45,8 +46,6 @@ function onRequest(
 ): void {
 	const method = clientReq.method ?? "GET";
 	const url = clientReq.url ?? "/";
-
-	const CONNECT_TIMEOUT_MS = 15_000;
 
 	if (method === "CONNECT") {
 		logRequest(method, url, undefined, url);

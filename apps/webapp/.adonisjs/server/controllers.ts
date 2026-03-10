@@ -7,6 +7,8 @@ export const controllers = {
   api: {
     proxy: {
       GetProxies: () => import('#controllers/api/proxy/get_proxies_controller'),
+      PickProxy: () => import('#controllers/api/proxy/pick_proxy_controller'),
+      TestProxy: () => import('#controllers/api/proxy/test_proxy_controller'),
     },
   },
   config: {
