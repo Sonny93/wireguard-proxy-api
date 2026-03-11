@@ -1,18 +1,9 @@
-import AppBaseModel from '#models/app_base_model';
+import { WireguardConfigSchema } from '#database/schema';
 import User from '#models/user';
-import { belongsTo, column } from '@adonisjs/lucid/orm';
+import { belongsTo } from '@adonisjs/lucid/orm';
 import type { BelongsTo } from '@adonisjs/lucid/types/relations';
 
-export default class WireguardConfig extends AppBaseModel {
-	@column()
-	declare userId: number;
-
-	@column()
-	declare name: string;
-
-	@column({ serializeAs: null })
-	declare privateKey: string;
-
+export default class WireguardConfig extends WireguardConfigSchema {
 	@belongsTo(() => User)
 	declare user: BelongsTo<typeof User>;
 
