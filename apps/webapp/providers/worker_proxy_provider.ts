@@ -1,21 +1,22 @@
+import env from '#start/env';
 import app from '@adonisjs/core/services/app';
 import { HttpProxyClient, ProxyWorkerService } from '@wireguard-proxy/core';
 
 export default class WorkerProxyProvider {
 	private resolveDockerSocketPath(): string | undefined {
-		return process.env.DOCKER_SOCKET_PATH;
+		return env.get('DOCKER_SOCKET_PATH');
 	}
 
 	private resolveImageName(): string {
-		return (process.env.GLUETUN_IMAGE_NAME ?? 'qmcgaw/gluetun:latest').trim();
+		return env.get('GLUETUN_IMAGE_NAME', 'qmcgaw/gluetun:latest');
 	}
 
 	private resolveProxyTestHost(): string {
-		return process.env.PROXY_TEST_HOST ?? '127.0.0.1';
+		return env.get('PROXY_TEST_HOST', '127.0.0.1');
 	}
 
 	private resolveBaseHostPort(): number | undefined {
-		const raw = process.env.PROXY_BASE_HOST_PORT?.trim();
+		const raw = env.get('PROXY_BASE_HOST_PORT');
 		if (!raw) return undefined;
 		const port = Number.parseInt(raw, 10);
 		if (!Number.isFinite(port) || port <= 0 || port > 65535) {
@@ -26,9 +27,9 @@ export default class WorkerProxyProvider {
 
 	private resolveGluetunEnv(): Record<string, string> {
 		return {
-			VPN_SERVICE_PROVIDER: process.env.VPN_SERVICE_PROVIDER ?? 'custom',
-			VPN_TYPE: process.env.VPN_TYPE ?? 'wireguard',
-			TZ: process.env.TZ ?? 'Europe/Paris',
+			VPN_SERVICE_PROVIDER: env.get('VPN_SERVICE_PROVIDER', 'custom'),
+			VPN_TYPE: env.get('VPN_TYPE', 'wireguard'),
+			TZ: env.get('TZ', 'Europe/Paris'),
 		};
 	}
 

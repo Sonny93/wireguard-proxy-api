@@ -24,9 +24,6 @@ export function createProxyImageReadyMiddleware(
 
 	class ProxyImageReadyMiddleware {
 		async handle(ctx: HttpContext, next: NextFn) {
-			const skipImageCheck = process.env.PROXY_SKIP_IMAGE_CHECK === 'true';
-			if (skipImageCheck) return next();
-
 			const proxyWorkerService =
 				await ctx.containerResolver.make(ProxyWorkerService);
 			const url = ctx.request.url();
