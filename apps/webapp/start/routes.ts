@@ -26,6 +26,9 @@ router
 			.post('/configs', [controllers.config.UploadConfig, 'execute'])
 			.as('configs.store');
 		router
+			.delete('/configs/:id', [controllers.config.DeleteConfig, 'execute'])
+			.as('configs.destroy');
+		router
 			.post('/proxies/start', [controllers.proxy.StartProxy, 'execute'])
 			.as('proxies.start');
 		router

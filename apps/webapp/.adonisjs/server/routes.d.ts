@@ -5,9 +5,12 @@ type ParamValue = string | number | bigint | boolean
 export type ScannedRoutes = {
   ALL: {
     'api.proxies.index': { paramsTuple?: []; params?: {} }
+    'api.proxies.pick': { paramsTuple?: []; params?: {} }
+    'api.proxies.test': { paramsTuple: [ParamValue]; params: {'configName': ParamValue} }
     'proxy.initializing': { paramsTuple?: []; params?: {} }
     'home': { paramsTuple?: []; params?: {} }
     'configs.store': { paramsTuple?: []; params?: {} }
+    'configs.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'proxies.start': { paramsTuple?: []; params?: {} }
     'proxies.stop': { paramsTuple?: []; params?: {} }
     'proxies.test': { paramsTuple?: []; params?: {} }
@@ -21,12 +24,16 @@ export type ScannedRoutes = {
   }
   GET: {
     'api.proxies.index': { paramsTuple?: []; params?: {} }
+    'api.proxies.pick': { paramsTuple?: []; params?: {} }
+    'api.proxies.test': { paramsTuple: [ParamValue]; params: {'configName': ParamValue} }
     'proxy.initializing': { paramsTuple?: []; params?: {} }
     'home': { paramsTuple?: []; params?: {} }
     'login': { paramsTuple?: []; params?: {} }
   }
   HEAD: {
     'api.proxies.index': { paramsTuple?: []; params?: {} }
+    'api.proxies.pick': { paramsTuple?: []; params?: {} }
+    'api.proxies.test': { paramsTuple: [ParamValue]; params: {'configName': ParamValue} }
     'proxy.initializing': { paramsTuple?: []; params?: {} }
     'home': { paramsTuple?: []; params?: {} }
     'login': { paramsTuple?: []; params?: {} }
@@ -42,6 +49,9 @@ export type ScannedRoutes = {
     'proxies.restartAll': { paramsTuple?: []; params?: {} }
     'logout': { paramsTuple?: []; params?: {} }
     'login.store': { paramsTuple?: []; params?: {} }
+  }
+  DELETE: {
+    'configs.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
 }
 declare module '@adonisjs/core/types/http' {

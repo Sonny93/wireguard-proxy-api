@@ -8,16 +8,33 @@ import { BaseModel, column } from '@adonisjs/lucid/orm'
 import { DateTime } from 'luxon'
 
 export class UserSchema extends BaseModel {
-  static $columns = ['id', 'fullName', 'email', 'password', 'createdAt', 'updatedAt'] as const
+  static $columns = ['fullName', 'email', 'password', 'id', 'createdAt', 'updatedAt'] as const
   $columns = UserSchema.$columns
-  @column({ isPrimary: true })
-  declare id: number
   @column()
   declare fullName: string | null
   @column()
   declare email: string
   @column({ serializeAs: null })
   declare password: string
+  @column({ isPrimary: true })
+  declare id: number
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+}
+
+export class WireguardConfigSchema extends BaseModel {
+  static $columns = ['userId', 'name', 'privateKey', 'id', 'createdAt', 'updatedAt'] as const
+  $columns = WireguardConfigSchema.$columns
+  @column()
+  declare userId: number
+  @column()
+  declare name: string
+  @column()
+  declare privateKey: string
+  @column({ isPrimary: true })
+  declare id: number
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
   @column.dateTime({ autoCreate: true, autoUpdate: true })

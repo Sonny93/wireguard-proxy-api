@@ -121,7 +121,12 @@ export default defineConfig({
 	],
 
 	hooks: {
-		init: [indexEntities(), indexPages({ framework: 'react' })],
+		init: [
+			indexEntities({
+				transformers: { enabled: true, withSharedProps: true },
+			}),
+			indexPages({ framework: 'react' }),
+		],
 		buildStarting: [() => import('@adonisjs/vite/build_hook')],
 	},
 });

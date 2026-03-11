@@ -12,6 +12,7 @@ export const controllers = {
     },
   },
   config: {
+    DeleteConfig: () => import('#controllers/config/delete_config_controller'),
     ShowConfigs: () => import('#controllers/config/show_configs_controller'),
     UploadConfig: () => import('#controllers/config/upload_config_controller'),
   },

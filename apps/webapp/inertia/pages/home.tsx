@@ -1,8 +1,9 @@
-import { Head, router } from '@inertiajs/react';
+import type { Data } from '@generated/data';
+import { Head, router, useForm } from '@inertiajs/react';
 import { Button } from '@minimalstuff/ui';
-import { useState } from 'react';
-
-type Config = { name: string };
+import { useRef, useState } from 'react';
+import { partition } from '~/lib/partition';
+import { extractContentFromFileList } from '../lib/wireguard-conf';
 
 type ActiveProxy = {
 	id: string;
@@ -14,28 +15,61 @@ type ActiveProxy = {
 type TestResult = { ok: true; ip: string } | { ok: false; error: string };
 
 type HomeProps = {
-	configs: Config[];
+	configs: Data.Config[];
 	activeProxies: ActiveProxy[];
-	errors: Partial<Record<string, string>>;
 };
 
-const Home = ({ configs, activeProxies = [], errors = {} }: HomeProps) => {
+type FormData = {
+	configs: { name: string; privateKey: string }[];
+};
+
+export default function Home({
+	configs,
+	activeProxies = [],
+}: Readonly<HomeProps>) {
+	const inputRef = useRef<HTMLInputElement>(null);
+	const form = useForm<FormData>({
+		configs: [],
+	});
+	const [fileErrors, setFileErrors] = useState<string[]>([]);
+
 	const [testState, setTestState] = useState<{
 		configName: string | null;
 		loading: boolean;
 		result: TestResult | null;
 	}>({ configName: null, loading: false, result: null });
 
-	const submit = (e: React.FormEvent<HTMLFormElement>) => {
-		e.preventDefault();
-		const form = e.currentTarget;
-		const input = form.querySelector<HTMLInputElement>('input[name="configs"]');
-		if (!input?.files?.length) return;
-		const fd = new FormData();
-		for (const file of input.files) {
-			fd.append('configs', file);
+	const handleReset = () => {
+		form.reset();
+		form.clearErrors();
+		setFileErrors([]);
+		if (inputRef.current) {
+			inputRef.current.value = '';
 		}
-		router.post('/configs', fd, { forceFormData: true });
+	};
+
+	const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+		setFileErrors([]);
+		form.clearErrors();
+
+		const files = e.target.files;
+		if (!files || files.length === 0) {
+			return;
+		}
+
+		const processedFiles = await extractContentFromFileList(files);
+		const [failed, success] = partition(
+			processedFiles,
+			(r): r is { error: string } => 'error' in r
+		);
+
+		setFileErrors(failed.map((f) => f.error));
+		form.setData('configs', success);
+	};
+
+	const submit = async (e: React.SubmitEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		form.post('/configs');
 	};
 
 	const startProxy = (configName: string) => {
@@ -97,6 +131,10 @@ const Home = ({ configs, activeProxies = [], errors = {} }: HomeProps) => {
 	const getProxyForConfig = (configName: string) =>
 		activeProxies.find((p) => p.configFile === configName);
 
+	const deleteConfig = (id: number) => {
+		router.delete(`/configs/${id}`, { preserveScroll: true });
+	};
+
 	return (
 		<>
 			<Head title="Homepage" />
@@ -106,14 +144,11 @@ const Home = ({ configs, activeProxies = [], errors = {} }: HomeProps) => {
 						Configs
 					</h1>
 					<p className="text-gray-600 dark:text-gray-300">
-						Upload WireGuard config files (.conf) to storage/configs.
+						Add WireGuard configs by selecting .conf files. Content is stored in
+						your account.
 					</p>
 				</div>
-				<form
-					onSubmit={submit}
-					encType="multipart/form-data"
-					className="flex flex-col gap-3"
-				>
+				<form onSubmit={submit} className="flex flex-col gap-3">
 					<div>
 						<label
 							htmlFor="configs"
@@ -128,16 +163,35 @@ const Home = ({ configs, activeProxies = [], errors = {} }: HomeProps) => {
 							accept=".conf"
 							multiple
 							className="w-full text-sm text-gray-600 file:mr-4 file:rounded file:border-0 file:bg-blue-50 file:px-4 file:py-2 file:text-blue-700 dark:text-gray-400 dark:file:bg-blue-900/30 dark:file:text-blue-300"
+							onChange={handleFileChange}
+							ref={inputRef}
 						/>
-						{errors.configs && (
-							<p className="mt-1 text-sm text-red-600 dark:text-red-400">
-								{errors.configs}
-							</p>
+						{fileErrors.length > 0 && (
+							<ul className="mt-1 list-disc pl-5 text-sm text-red-600 dark:text-red-400">
+								{fileErrors.map((error) => (
+									<li key={error}>{error}</li>
+								))}
+							</ul>
 						)}
 					</div>
-					<Button type="submit" variant="primary">
-						Upload
-					</Button>
+					<div className="flex flex-wrap gap-2">
+						<Button
+							type="submit"
+							variant="primary"
+							disabled={form.processing || fileErrors.length > 0}
+							fullWidth
+						>
+							{form.processing ? 'Adding…' : 'Add configs'}
+						</Button>
+						<Button
+							type="reset"
+							variant="secondary"
+							disabled={form.data.configs.length === 0}
+							onClick={handleReset}
+						>
+							Reset
+						</Button>
+					</div>
 				</form>
 				<div>
 					<div className="mb-2 flex flex-wrap items-center justify-between gap-2">
@@ -168,7 +222,7 @@ const Home = ({ configs, activeProxies = [], errors = {} }: HomeProps) => {
 								const proxy = getProxyForConfig(c.name);
 								return (
 									<li
-										key={c.name}
+										key={c.id}
 										className="flex flex-wrap items-center gap-2 rounded border border-gray-200 bg-gray-50 p-2 dark:border-gray-700 dark:bg-gray-800/50"
 									>
 										<span className="font-mono text-sm text-gray-700 dark:text-gray-300">
@@ -227,6 +281,14 @@ const Home = ({ configs, activeProxies = [], errors = {} }: HomeProps) => {
 												Start proxy
 											</Button>
 										)}
+										<Button
+											type="button"
+											onClick={() => deleteConfig(c.id)}
+											variant="danger"
+											className="ml-auto"
+										>
+											Remove
+										</Button>
 									</li>
 								);
 							})}
@@ -236,6 +298,4 @@ const Home = ({ configs, activeProxies = [], errors = {} }: HomeProps) => {
 			</div>
 		</>
 	);
-};
-
-export default Home;
+}

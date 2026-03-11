@@ -1,7 +1,8 @@
 import { ConfigService } from '#services/config_service';
-import { ProxyWorkerService } from '@wireguard-proxy/core';
+import ConfigTransformer from '#transformers/config_transformer';
 import { inject } from '@adonisjs/core';
 import { HttpContext } from '@adonisjs/core/http';
+import { ProxyWorkerService } from '@wireguard-proxy/core';
 
 @inject()
 export default class ShowConfigsController {
@@ -10,9 +11,13 @@ export default class ShowConfigsController {
 		private readonly configService: ConfigService
 	) {}
 
-	async render({ inertia }: HttpContext) {
-		const configs = await this.configService.getConfigFiles();
+	async render({ inertia, auth }: HttpContext) {
+		const user = auth.getUserOrFail();
+		const configs = await this.configService.getConfigsForUser(user.id);
 		const activeProxies = await this.proxyWorkerService.listActive();
-		return inertia.render('home', { configs, activeProxies });
+		return inertia.render('home', {
+			configs: ConfigTransformer.transform(configs),
+			activeProxies,
+		});
 	}
 }
