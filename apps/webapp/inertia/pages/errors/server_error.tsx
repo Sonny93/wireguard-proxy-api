@@ -1,11 +1,8 @@
-export default function ServerError(props: { error: any }) {
-	return (
-		<>
-			<div className="container">
-				<div className="title">Server Error</div>
+const ServerError = () => (
+	<div className="flex flex-col items-center justify-center h-screen">
+		<div className="title">Server error</div>
+		<span>An error occurred on the server. Please try again later.</span>
+	</div>
+);
 
-				<span>{props.error.message}</span>
-			</div>
-		</>
-	);
-}
+export default ServerError;

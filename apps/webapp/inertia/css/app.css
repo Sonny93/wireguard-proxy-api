@@ -14,3 +14,8 @@ body {
 	height: 100dvh;
 	width: 100%;
 }
+
+.dark,
+.dark #app {
+	color: #fff;
+}
