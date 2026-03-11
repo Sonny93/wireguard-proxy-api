@@ -5,4 +5,3 @@ export default class InitializingController {
 		return inertia.render('proxy/initializing', {});
 	}
 }
-

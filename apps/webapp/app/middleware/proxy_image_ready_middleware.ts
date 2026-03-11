@@ -27,9 +27,8 @@ export function createProxyImageReadyMiddleware(
 			const skipImageCheck = process.env.PROXY_SKIP_IMAGE_CHECK === 'true';
 			if (skipImageCheck) return next();
 
-			const proxyWorkerService = await ctx.containerResolver.make(
-				ProxyWorkerService
-			);
+			const proxyWorkerService =
+				await ctx.containerResolver.make(ProxyWorkerService);
 			const url = ctx.request.url();
 			const isInitializingUrl = pathMatches(url, initializingPath);
 			const isSkippedPath = skipPaths.some((p) => pathMatches(url, p));
@@ -56,4 +55,3 @@ export function createProxyImageReadyMiddleware(
 
 	return ProxyImageReadyMiddleware;
 }
-
