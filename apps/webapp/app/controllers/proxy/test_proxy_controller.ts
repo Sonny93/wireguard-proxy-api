@@ -10,7 +10,10 @@ export default class TestProxyController {
 	async execute({ request, response, auth }: HttpContext) {
 		const { params } = await request.validateUsing(actionProxyValidator);
 		const user = auth.getUserOrFail();
-		const result = await this.proxyService.testProxy(params.configId, user.id);
+		const result = await this.proxyService.testUserProxy(
+			params.configId,
+			user.id
+		);
 		return response.json(result);
 	}
 }

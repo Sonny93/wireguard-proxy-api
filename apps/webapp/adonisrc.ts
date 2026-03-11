@@ -17,7 +17,7 @@ export default defineConfig({
 	providers: [
 		() => import('@adonisjs/core/providers/app_provider'),
 		{
-			file: () => import('./providers/wireguard_proxy_provider.js'),
+			file: () => import('#providers/worker_proxy_provider'),
 			environment: ['web'],
 		},
 		() => import('@adonisjs/core/providers/hash_provider'),
@@ -36,6 +36,7 @@ export default defineConfig({
 		() => import('@adonisjs/auth/auth_provider'),
 		() => import('@adonisjs/inertia/inertia_provider'),
 		() => import('@adonisjs/drive/drive_provider'),
+		() => import('#providers/create_proxy_service_provider'),
 	],
 
 	preloads: [() => import('#start/routes'), () => import('#start/kernel')],

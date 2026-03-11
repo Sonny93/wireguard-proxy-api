@@ -13,7 +13,7 @@ export default class ShowConfigsController {
 
 	async render({ inertia, auth }: HttpContext) {
 		const user = auth.getUserOrFail();
-		const configs = await this.configService.getConfigsForUser(user.id);
+		const configs = await this.configService.getUserConfigs(user.id);
 		const activeProxies = await this.proxyWorkerService.listActive();
 		return inertia.render('home', {
 			configs: ConfigTransformer.transform(configs),

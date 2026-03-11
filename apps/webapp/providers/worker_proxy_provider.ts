@@ -1,7 +1,7 @@
 import app from '@adonisjs/core/services/app';
 import { HttpProxyClient, ProxyWorkerService } from '@wireguard-proxy/core';
 
-export default class WireGuardProxyProvider {
+export default class WorkerProxyProvider {
 	private resolveDockerSocketPath(): string | undefined {
 		return process.env.DOCKER_SOCKET_PATH;
 	}
@@ -54,5 +54,15 @@ export default class WireGuardProxyProvider {
 		logger.info('Proxy workers use gluetun image', {
 			imageName: this.resolveImageName(),
 		});
+	}
+
+	async ready() {
+		const proxyWorkerService = await app.container.make(ProxyWorkerService);
+		await proxyWorkerService.stopAll();
+	}
+
+	async shutdown() {
+		const proxyWorkerService = await app.container.make(ProxyWorkerService);
+		await proxyWorkerService.stopAll();
 	}
 }

@@ -24,17 +24,17 @@ const routes = {
     tokens: [{"old":"/proxies/:configName/test","type":0,"val":"proxies","end":""},{"old":"/proxies/:configName/test","type":1,"val":"configName","end":""},{"old":"/proxies/:configName/test","type":0,"val":"test","end":""}],
     types: placeholder as Registry['api.proxies.test']['types'],
   },
-  'configs.store': {
+  'configs.create': {
     methods: ["POST"],
     pattern: '/configs',
     tokens: [{"old":"/configs","type":0,"val":"configs","end":""}],
-    types: placeholder as Registry['configs.store']['types'],
+    types: placeholder as Registry['configs.create']['types'],
   },
-  'configs.destroy': {
+  'configs.delete': {
     methods: ["DELETE"],
-    pattern: '/configs/:id',
-    tokens: [{"old":"/configs/:id","type":0,"val":"configs","end":""},{"old":"/configs/:id","type":1,"val":"id","end":""}],
-    types: placeholder as Registry['configs.destroy']['types'],
+    pattern: '/configs/:configId',
+    tokens: [{"old":"/configs/:configId","type":0,"val":"configs","end":""},{"old":"/configs/:configId","type":1,"val":"configId","end":""}],
+    types: placeholder as Registry['configs.delete']['types'],
   },
   'proxies.all.start': {
     methods: ["POST"],

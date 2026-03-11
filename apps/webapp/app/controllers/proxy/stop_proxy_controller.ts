@@ -10,7 +10,7 @@ export default class StopProxyController {
 	async execute({ request, response, auth }: HttpContext) {
 		const user = auth.getUserOrFail();
 		const { params } = await request.validateUsing(actionProxyValidator);
-		await this.proxyService.stopProxy(params.configId, user.id);
+		await this.proxyService.stopUserProxy(params.configId, user.id);
 		return response.redirect().back();
 	}
 }

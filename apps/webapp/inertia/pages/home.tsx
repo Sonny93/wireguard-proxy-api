@@ -2,7 +2,7 @@ import type { Data } from '@generated/data';
 import { Head, router } from '@inertiajs/react';
 import { Button } from '@minimalstuff/ui';
 import { ConfigList } from '~/components/configs/config_list';
-import { UploadConfigForm } from '~/components/configs/upload_config_form';
+import { CreateConfigForm } from '~/components/configs/create_config_form';
 import { urlFor } from '~/lib/tuyau';
 
 export type ActiveProxy = {
@@ -49,7 +49,7 @@ export default function Home({
 						your account.
 					</p>
 				</div>
-				<UploadConfigForm />
+				<CreateConfigForm />
 				<div>
 					<div className="mb-2 flex flex-wrap items-center justify-between gap-2">
 						<h2 className="text-lg font-medium text-gray-900 dark:text-white">

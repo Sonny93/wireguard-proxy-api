@@ -10,7 +10,7 @@ export default class RestartProxyController {
 	async execute({ request, response, auth }: HttpContext) {
 		const { params } = await request.validateUsing(actionProxyValidator);
 		const user = auth.getUserOrFail();
-		await this.proxyService.restartProxy(params.configId, user.id);
+		await this.proxyService.restartUserProxy(params.configId, user.id);
 		return response.redirect().back();
 	}
 }

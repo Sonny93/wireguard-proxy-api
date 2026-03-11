@@ -43,7 +43,7 @@ export interface Registry {
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/proxy/test_proxy_controller').default['handle']>>>
     }
   }
-  'configs.store': {
+  'configs.create': {
     methods: ["POST"]
     pattern: '/configs'
     types: {
@@ -51,17 +51,17 @@ export interface Registry {
       paramsTuple: []
       params: {}
       query: ExtractQuery<InferInput<(typeof import('#validators/config').uploadConfigValidator)>>
-      response: ExtractResponse<Awaited<ReturnType<import('#controllers/config/upload_config_controller').default['execute']>>>
-      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/config/upload_config_controller').default['execute']>>> | { status: 422; response: { errors: SimpleError[] } }
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/config/create_config_controller').default['execute']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/config/create_config_controller').default['execute']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
-  'configs.destroy': {
+  'configs.delete': {
     methods: ["DELETE"]
-    pattern: '/configs/:id'
+    pattern: '/configs/:configId'
     types: {
       body: ExtractBody<InferInput<(typeof import('#validators/config').deleteConfigValidator)>>
       paramsTuple: [ParamValue]
-      params: { id: ParamValue }
+      params: { configId: ParamValue }
       query: ExtractQuery<InferInput<(typeof import('#validators/config').deleteConfigValidator)>>
       response: ExtractResponse<Awaited<ReturnType<import('#controllers/config/delete_config_controller').default['execute']>>>
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/config/delete_config_controller').default['execute']>>> | { status: 422; response: { errors: SimpleError[] } }

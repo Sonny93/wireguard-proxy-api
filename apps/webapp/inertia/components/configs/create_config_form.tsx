@@ -2,13 +2,14 @@ import { useForm } from '@inertiajs/react';
 import { Button } from '@minimalstuff/ui';
 import { useRef, useState } from 'react';
 import { partition } from '~/lib/partition';
+import { urlFor } from '~/lib/tuyau';
 import { extractContentFromFileList } from '~/lib/wireguard-conf';
 
 type FormData = {
 	configs: { name: string; privateKey: string }[];
 };
 
-export function UploadConfigForm() {
+export function CreateConfigForm() {
 	const inputRef = useRef<HTMLInputElement>(null);
 	const form = useForm<FormData>({
 		configs: [],
@@ -52,7 +53,8 @@ export function UploadConfigForm() {
 
 	const submit = async (e: React.SubmitEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		form.post('/configs', {
+		const createUrl = urlFor('configs.create');
+		form.post(createUrl, {
 			onSuccess: handleReset,
 		});
 	};

@@ -5,16 +5,14 @@ import { HttpContext } from '@adonisjs/core/http';
 import logger from '@adonisjs/core/services/logger';
 
 @inject()
-export default class UploadConfigController {
+export default class CreateConfigController {
 	constructor(private readonly configService: ConfigService) {}
 
 	async execute({ request, response, auth }: HttpContext) {
 		const { configs } = await request.validateUsing(uploadConfigValidator);
 		const user = auth.getUserOrFail();
-		for (const { name, privateKey } of configs) {
-			await this.configService.createOrUpdate(user.id, name, privateKey);
-		}
-		logger.info(`${configs.length} configs saved successfully`);
+		await this.configService.createMany(user.id, configs);
+		logger.info(`${configs.length} configs created successfully`);
 		return response.redirect().back();
 	}
 }

@@ -8,7 +8,7 @@ export default class RestartAllProxiesController {
 
 	async execute({ response, auth }: HttpContext) {
 		const user = auth.getUserOrFail();
-		await this.proxyService.restartAllProxies(user.id);
+		await this.proxyService.restartUserProxies(user.id);
 		return response.redirect().back();
 	}
 }

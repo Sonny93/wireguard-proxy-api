@@ -20,7 +20,7 @@ export const uploadConfigValidator = vine.create({
 
 export const deleteConfigValidator = vine.create({
 	params: vine.object({
-		id: vine
+		configId: vine
 			.number()
 			.positive()
 			.exists({ table: WireguardConfig.table, column: 'id' }),

@@ -53,7 +53,7 @@ export function ConfigListItem({
 		activeProxies.find((p) => p.configName === configName);
 
 	const deleteConfig = (id: number) => {
-		const deleteUrl = urlFor('configs.destroy', { id });
+		const deleteUrl = urlFor('configs.delete', { configId: id });
 		router.delete(deleteUrl, { preserveScroll: true });
 	};
 

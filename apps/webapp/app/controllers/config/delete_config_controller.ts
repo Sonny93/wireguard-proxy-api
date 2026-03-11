@@ -10,7 +10,7 @@ export default class DeleteConfigController {
 	async execute({ request, response, auth }: HttpContext) {
 		const { params } = await request.validateUsing(deleteConfigValidator);
 		const user = auth.getUserOrFail();
-		await this.configService.deleteByIdAndUser(params.id, user.id);
+		await this.configService.deleteByIdAndUser(params.configId, user.id);
 		return response.redirect().back();
 	}
 }

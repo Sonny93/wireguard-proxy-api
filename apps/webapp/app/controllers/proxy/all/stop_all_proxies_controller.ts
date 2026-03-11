@@ -8,7 +8,7 @@ export default class StopAllProxiesController {
 
 	async execute({ response, auth }: HttpContext) {
 		const user = auth.getUserOrFail();
-		await this.proxyService.stopAllProxies(user.id);
+		await this.proxyService.stopUserProxies(user.id);
 		return response.redirect().back();
 	}
 }

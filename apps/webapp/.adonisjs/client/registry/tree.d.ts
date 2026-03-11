@@ -10,8 +10,8 @@ export interface ApiDefinition {
     }
   }
   configs: {
-    store: typeof routes['configs.store']
-    destroy: typeof routes['configs.destroy']
+    create: typeof routes['configs.create']
+    delete: typeof routes['configs.delete']
   }
   proxies: {
     all: {

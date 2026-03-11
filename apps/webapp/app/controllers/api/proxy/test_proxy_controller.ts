@@ -1,6 +1,6 @@
-import { ProxyWorkerService } from '@wireguard-proxy/core';
 import { inject } from '@adonisjs/core';
 import { HttpContext } from '@adonisjs/core/http';
+import { ProxyWorkerService } from '@wireguard-proxy/core';
 
 @inject()
 export default class TestProxyController {
@@ -11,6 +11,7 @@ export default class TestProxyController {
 		if (!configName) {
 			return response.badRequest({ ok: false, error: 'Missing configName' });
 		}
+
 		const result = await this.proxyWorkerService.testProxy(configName);
 		return response.json(result);
 	}

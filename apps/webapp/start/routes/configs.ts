@@ -3,10 +3,10 @@ import router from '@adonisjs/core/services/router';
 
 router
 	.group(() => {
-		router.post('/', [controllers.config.UploadConfig, 'execute']).as('store');
+		router.post('/', [controllers.config.CreateConfig, 'execute']).as('create');
 		router
-			.delete('/:id', [controllers.config.DeleteConfig, 'execute'])
-			.as('destroy');
+			.delete('/:configId', [controllers.config.DeleteConfig, 'execute'])
+			.as('delete');
 	})
 	.prefix('/configs')
 	.as('configs');

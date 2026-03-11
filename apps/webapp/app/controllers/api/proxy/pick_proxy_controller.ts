@@ -1,6 +1,6 @@
-import { ProxyWorkerService } from '@wireguard-proxy/core';
 import { inject } from '@adonisjs/core';
 import { HttpContext } from '@adonisjs/core/http';
+import { ProxyWorkerService } from '@wireguard-proxy/core';
 
 @inject()
 export default class PickProxyController {
@@ -11,6 +11,7 @@ export default class PickProxyController {
 		if (list.length === 0) {
 			return response.json({ proxy: null });
 		}
+
 		const proxy = list[Math.floor(Math.random() * list.length)];
 		return response.json({ proxy });
 	}

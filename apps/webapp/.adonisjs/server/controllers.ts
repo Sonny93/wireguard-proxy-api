@@ -12,9 +12,9 @@ export const controllers = {
     },
   },
   config: {
+    CreateConfig: () => import('#controllers/config/create_config_controller'),
     DeleteConfig: () => import('#controllers/config/delete_config_controller'),
     ShowConfigs: () => import('#controllers/config/show_configs_controller'),
-    UploadConfig: () => import('#controllers/config/upload_config_controller'),
   },
   proxy: {
     all: {

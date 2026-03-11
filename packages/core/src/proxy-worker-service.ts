@@ -175,6 +175,18 @@ export class ProxyWorkerService {
 		return true;
 	}
 
+	async removeAll(): Promise<void> {
+		const containers = await this.#docker.listContainers({
+			all: true,
+			filters: { ancestor: [this.#options.imageName] },
+		});
+		await Promise.all(
+			containers.map((c) =>
+				this.#docker.getContainer(c.Id).remove({ force: true })
+			)
+		);
+	}
+
 	async restart(
 		configName: string,
 		wireguardPrivateKey: string

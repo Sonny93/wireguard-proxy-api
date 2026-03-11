@@ -7,8 +7,8 @@ export type ScannedRoutes = {
     'api.proxies.index': { paramsTuple?: []; params?: {} }
     'api.proxies.pick': { paramsTuple?: []; params?: {} }
     'api.proxies.test': { paramsTuple: [ParamValue]; params: {'configName': ParamValue} }
-    'configs.store': { paramsTuple?: []; params?: {} }
-    'configs.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'configs.create': { paramsTuple?: []; params?: {} }
+    'configs.delete': { paramsTuple: [ParamValue]; params: {'configId': ParamValue} }
     'proxies.all.start': { paramsTuple?: []; params?: {} }
     'proxies.all.stop': { paramsTuple?: []; params?: {} }
     'proxies.all.restart': { paramsTuple?: []; params?: {} }
@@ -40,7 +40,7 @@ export type ScannedRoutes = {
     'proxy.initializing': { paramsTuple?: []; params?: {} }
   }
   POST: {
-    'configs.store': { paramsTuple?: []; params?: {} }
+    'configs.create': { paramsTuple?: []; params?: {} }
     'proxies.all.start': { paramsTuple?: []; params?: {} }
     'proxies.all.stop': { paramsTuple?: []; params?: {} }
     'proxies.all.restart': { paramsTuple?: []; params?: {} }
@@ -53,7 +53,7 @@ export type ScannedRoutes = {
     'logout': { paramsTuple?: []; params?: {} }
   }
   DELETE: {
-    'configs.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'configs.delete': { paramsTuple: [ParamValue]; params: {'configId': ParamValue} }
   }
 }
 declare module '@adonisjs/core/types/http' {
