@@ -2,67 +2,16 @@ import { controllers } from '#generated/controllers';
 import router from '@adonisjs/core/services/router';
 import { middleware } from './kernel.js';
 
+import '#routes/api/proxies';
+import '#routes/auth';
+import '#routes/configs';
+import '#routes/proxies';
+
 router
-	.get('/api/proxies', [controllers.api.proxy.GetProxies, 'render'])
-	.as('api.proxies.index');
-router
-	.get('/api/proxies/pick', [controllers.api.proxy.PickProxy, 'handle'])
-	.as('api.proxies.pick');
-router
-	.get('/api/proxies/:configName/test', [
-		controllers.api.proxy.TestProxy,
-		'handle',
-	])
-	.as('api.proxies.test');
+	.get('/', [controllers.config.ShowConfigs, 'render'])
+	.as('home')
+	.use(middleware.auth());
 
 router
 	.get('/proxy/initializing', [controllers.proxy.Initializing, 'render'])
 	.as('proxy.initializing');
-
-router
-	.group(() => {
-		router.get('/', [controllers.config.ShowConfigs, 'render']).as('home');
-		router
-			.post('/configs', [controllers.config.UploadConfig, 'execute'])
-			.as('configs.store');
-		router
-			.delete('/configs/:id', [controllers.config.DeleteConfig, 'execute'])
-			.as('configs.destroy');
-		router
-			.post('/proxies/start', [controllers.proxy.StartProxy, 'execute'])
-			.as('proxies.start');
-		router
-			.post('/proxies/stop', [controllers.proxy.StopProxy, 'execute'])
-			.as('proxies.stop');
-		router
-			.post('/proxies/test', [controllers.proxy.TestProxy, 'execute'])
-			.as('proxies.test');
-		router
-			.post('/proxies/restart', [controllers.proxy.RestartProxy, 'execute'])
-			.as('proxies.restart');
-		router
-			.post('/proxies/start-all', [
-				controllers.proxy.StartAllProxies,
-				'execute',
-			])
-			.as('proxies.startAll');
-		router
-			.post('/proxies/stop-all', [controllers.proxy.StopAllProxies, 'execute'])
-			.as('proxies.stopAll');
-		router
-			.post('/proxies/restart-all', [
-				controllers.proxy.RestartAllProxies,
-				'execute',
-			])
-			.as('proxies.restartAll');
-
-		router.post('/logout', [controllers.Sessions, 'destroy']).as('logout');
-	})
-	.use(middleware.auth());
-
-router
-	.group(() => {
-		router.get('/login', [controllers.Sessions, 'create']).as('login');
-		router.post('/login', [controllers.Sessions, 'store']).as('login.store');
-	})
-	.use(middleware.guest());
