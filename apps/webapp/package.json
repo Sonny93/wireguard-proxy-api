@@ -73,6 +73,7 @@
 		"@adonisjs/vite": "^5.1.0",
 		"@inertiajs/react": "3.0.0-beta.2",
 		"@minimalstuff/ui": "^1.2.1",
+		"@tuyau/core": "^1.2.1",
 		"@vinejs/vine": "^4.3.0",
 		"@wireguard-proxy/core": "workspace:*",
 		"better-sqlite3": "^12.6.2",
