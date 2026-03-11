@@ -5,10 +5,7 @@
 	"scripts": {
 		"dev:webapp": "pnpm --filter @wireguard-proxy/webapp dev",
 		"build:webapp": "pnpm --filter @wireguard-proxy/webapp build",
-		"dev:proxy": "pnpm --filter @wireguard-proxy/proxy dev",
-		"build:proxy": "pnpm --filter @wireguard-proxy/proxy build",
 		"build:core": "pnpm --filter @wireguard-proxy/core build",
-		"build:adonis": "pnpm --filter @wireguard-proxy/adonis build",
 		"build:client": "pnpm --filter @wireguard-proxy/client build",
 		"build": "pnpm -r run build"
 	},

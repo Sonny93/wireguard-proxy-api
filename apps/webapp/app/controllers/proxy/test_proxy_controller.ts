@@ -1,7 +1,7 @@
-import { ProxyWorkerService } from '@wireguard-proxy/core';
 import { actionProxyValidator } from '#validators/proxy';
 import { inject } from '@adonisjs/core';
 import { HttpContext } from '@adonisjs/core/http';
+import { ProxyWorkerService } from '@wireguard-proxy/core';
 
 @inject()
 export default class TestProxyController {

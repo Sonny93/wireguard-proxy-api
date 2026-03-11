@@ -8,7 +8,6 @@ services:
     environment:
       - HOST=0.0.0.0
       - NODE_ENV=production
-      - PROXY_CONFIGS_HOST_PATH=${PROXY_CONFIGS_HOST_PATH:-${PWD}/storage/configs}
     env_file:
       - apps/webapp/.env
     ports:

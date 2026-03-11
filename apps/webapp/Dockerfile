@@ -31,7 +31,7 @@ COPY --from=deps /app/node_modules /app/node_modules
 COPY --from=deps /app/package.json /app/package.json
 COPY --from=deps /app/pnpm-workspace.yaml /app/pnpm-workspace.yaml
 COPY . .
-RUN pnpm run build:core && pnpm run build:adonis
+RUN pnpm run build:core
 WORKDIR /app/apps/webapp
 RUN node ace build --ignore-ts-errors
 
@@ -48,13 +48,10 @@ WORKDIR /app
 RUN mkdir -p /app/tmp
 COPY --from=build /app/apps/webapp/build /app
 COPY --from=build /app/apps/webapp/scripts/entrypoint.sh /app/scripts/entrypoint.sh
-COPY --from=build /app/apps/proxy /proxy
 COPY --from=production-deps /app/node_modules /app/node_modules
 COPY --from=build /app/packages /app/packages
 RUN chmod +x /app/scripts/entrypoint.sh
 RUN npm rebuild better-sqlite3
-
-ENV PROXY_BUILD_CONTEXT_PATH=/proxy
 
 EXPOSE 3333
 

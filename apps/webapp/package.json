@@ -73,7 +73,6 @@
 		"@inertiajs/react": "^2.3.15",
 		"@minimalstuff/ui": "^1.2.1",
 		"@vinejs/vine": "^4.3.0",
-		"@wireguard-proxy/adonis": "workspace:*",
 		"@wireguard-proxy/core": "workspace:*",
 		"better-sqlite3": "^12.6.2",
 		"edge.js": "^6.5.0",

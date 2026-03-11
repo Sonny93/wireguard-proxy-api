@@ -1,27 +1,18 @@
-import { Head, router } from '@inertiajs/react';
-import { useEffect } from 'react';
+import { Head } from '@inertiajs/react';
 
-const Initializing = () => {
-	useEffect(() => {
-		const interval = setInterval(() => {
-			router.reload({ only: [] });
-		}, 3000);
-		return () => clearInterval(interval);
-	}, []);
-
+export default function Initializing() {
 	return (
 		<>
 			<Head title="Proxy initializing" />
-			<div className="flex min-h-screen flex-col items-center justify-center gap-4">
-				<p className="text-lg text-gray-700 dark:text-gray-300">
-					Building proxy image, please wait…
-				</p>
-				<p className="text-sm text-gray-500 dark:text-gray-400">
-					You will be redirected when ready.
+			<div className="flex flex-col gap-2">
+				<h1 className="text-2xl font-semibold text-gray-900 dark:text-white">
+					Proxy initializing
+				</h1>
+				<p className="text-gray-600 dark:text-gray-300">
+					Pulling required Docker image. This may take a moment.
 				</p>
 			</div>
 		</>
 	);
-};
+}
 
-export default Initializing;

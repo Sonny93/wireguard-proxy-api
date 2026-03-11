@@ -8,7 +8,7 @@ export type ProxyImageReadyMiddlewareOptions = {
 };
 
 const DEFAULT_INITIALIZING_PATH = '/proxy/initializing';
-const DEFAULT_SKIP_PATHS = ['/login'];
+const DEFAULT_SKIP_PATHS = ['/login', '/api'];
 
 function pathMatches(url: string, path: string): boolean {
 	const pathname = new URL(url, 'http://localhost').pathname;
@@ -24,6 +24,9 @@ export function createProxyImageReadyMiddleware(
 
 	class ProxyImageReadyMiddleware {
 		async handle(ctx: HttpContext, next: NextFn) {
+			const skipImageCheck = process.env.PROXY_SKIP_IMAGE_CHECK === 'true';
+			if (skipImageCheck) return next();
+
 			const proxyWorkerService = await ctx.containerResolver.make(
 				ProxyWorkerService
 			);
@@ -47,9 +50,10 @@ export function createProxyImageReadyMiddleware(
 				const redirectUrl = ctx.request.input('redirect', '/');
 				return ctx.response.redirect(redirectUrl);
 			}
-			return await next();
+			return next();
 		}
 	}
 
 	return ProxyImageReadyMiddleware;
 }
+

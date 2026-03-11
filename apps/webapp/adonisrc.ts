@@ -44,7 +44,7 @@ export default defineConfig({
 	providers: [
 		() => import('@adonisjs/core/providers/app_provider'),
 		{
-			file: () => import('@wireguard-proxy/adonis/proxy-provider'),
+			file: () => import('./providers/wireguard_proxy_provider.js'),
 			environment: ['web'],
 		},
 		() => import('@adonisjs/core/providers/hash_provider'),

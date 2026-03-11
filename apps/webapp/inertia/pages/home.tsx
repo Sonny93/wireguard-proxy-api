@@ -8,7 +8,7 @@ import { extractContentFromFileList } from '../lib/wireguard-conf';
 type ActiveProxy = {
 	id: string;
 	name: string;
-	configFile: string;
+	configName: string;
 	port: number;
 };
 
@@ -129,7 +129,7 @@ export default function Home({
 	};
 
 	const getProxyForConfig = (configName: string) =>
-		activeProxies.find((p) => p.configFile === configName);
+		activeProxies.find((p) => p.configName === configName);
 
 	const deleteConfig = (id: number) => {
 		router.delete(`/configs/${id}`, { preserveScroll: true });
