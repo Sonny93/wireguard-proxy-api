@@ -88,7 +88,7 @@ export function UploadConfigForm() {
 				<Button
 					type="submit"
 					variant="primary"
-					disabled={form.processing || fileErrors.length > 0}
+					disabled={form.processing ?? fileErrors.length > 0}
 					fullWidth
 				>
 					{form.processing ? 'Adding…' : 'Add configs'}

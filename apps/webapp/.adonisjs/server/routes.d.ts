@@ -7,8 +7,6 @@ export type ScannedRoutes = {
     'api.proxies.index': { paramsTuple?: []; params?: {} }
     'api.proxies.pick': { paramsTuple?: []; params?: {} }
     'api.proxies.test': { paramsTuple: [ParamValue]; params: {'configName': ParamValue} }
-    'proxy.initializing': { paramsTuple?: []; params?: {} }
-    'home': { paramsTuple?: []; params?: {} }
     'configs.store': { paramsTuple?: []; params?: {} }
     'configs.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'proxies.start': { paramsTuple?: []; params?: {} }
@@ -18,25 +16,27 @@ export type ScannedRoutes = {
     'proxies.startAll': { paramsTuple?: []; params?: {} }
     'proxies.stopAll': { paramsTuple?: []; params?: {} }
     'proxies.restartAll': { paramsTuple?: []; params?: {} }
-    'logout': { paramsTuple?: []; params?: {} }
     'login': { paramsTuple?: []; params?: {} }
     'login.store': { paramsTuple?: []; params?: {} }
+    'logout': { paramsTuple?: []; params?: {} }
+    'home': { paramsTuple?: []; params?: {} }
+    'proxy.initializing': { paramsTuple?: []; params?: {} }
   }
   GET: {
     'api.proxies.index': { paramsTuple?: []; params?: {} }
     'api.proxies.pick': { paramsTuple?: []; params?: {} }
     'api.proxies.test': { paramsTuple: [ParamValue]; params: {'configName': ParamValue} }
-    'proxy.initializing': { paramsTuple?: []; params?: {} }
-    'home': { paramsTuple?: []; params?: {} }
     'login': { paramsTuple?: []; params?: {} }
+    'home': { paramsTuple?: []; params?: {} }
+    'proxy.initializing': { paramsTuple?: []; params?: {} }
   }
   HEAD: {
     'api.proxies.index': { paramsTuple?: []; params?: {} }
     'api.proxies.pick': { paramsTuple?: []; params?: {} }
     'api.proxies.test': { paramsTuple: [ParamValue]; params: {'configName': ParamValue} }
-    'proxy.initializing': { paramsTuple?: []; params?: {} }
-    'home': { paramsTuple?: []; params?: {} }
     'login': { paramsTuple?: []; params?: {} }
+    'home': { paramsTuple?: []; params?: {} }
+    'proxy.initializing': { paramsTuple?: []; params?: {} }
   }
   POST: {
     'configs.store': { paramsTuple?: []; params?: {} }
@@ -47,8 +47,8 @@ export type ScannedRoutes = {
     'proxies.startAll': { paramsTuple?: []; params?: {} }
     'proxies.stopAll': { paramsTuple?: []; params?: {} }
     'proxies.restartAll': { paramsTuple?: []; params?: {} }
-    'logout': { paramsTuple?: []; params?: {} }
     'login.store': { paramsTuple?: []; params?: {} }
+    'logout': { paramsTuple?: []; params?: {} }
   }
   DELETE: {
     'configs.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
