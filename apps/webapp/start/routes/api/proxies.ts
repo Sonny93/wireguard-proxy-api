@@ -9,5 +9,5 @@ router
 			.get('/:configName/test', [controllers.api.proxy.TestProxy, 'handle'])
 			.as('test');
 	})
-	.prefix('/proxies')
+	.prefix('/api/proxies')
 	.as('api.proxies');

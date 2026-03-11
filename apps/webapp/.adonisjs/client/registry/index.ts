@@ -8,20 +8,20 @@ const placeholder: any = {}
 const routes = {
   'api.proxies.index': {
     methods: ["GET","HEAD"],
-    pattern: '/proxies',
-    tokens: [{"old":"/proxies","type":0,"val":"proxies","end":""}],
+    pattern: '/api/proxies',
+    tokens: [{"old":"/api/proxies","type":0,"val":"api","end":""},{"old":"/api/proxies","type":0,"val":"proxies","end":""}],
     types: placeholder as Registry['api.proxies.index']['types'],
   },
   'api.proxies.pick': {
     methods: ["GET","HEAD"],
-    pattern: '/proxies/pick',
-    tokens: [{"old":"/proxies/pick","type":0,"val":"proxies","end":""},{"old":"/proxies/pick","type":0,"val":"pick","end":""}],
+    pattern: '/api/proxies/pick',
+    tokens: [{"old":"/api/proxies/pick","type":0,"val":"api","end":""},{"old":"/api/proxies/pick","type":0,"val":"proxies","end":""},{"old":"/api/proxies/pick","type":0,"val":"pick","end":""}],
     types: placeholder as Registry['api.proxies.pick']['types'],
   },
   'api.proxies.test': {
     methods: ["GET","HEAD"],
-    pattern: '/proxies/:configName/test',
-    tokens: [{"old":"/proxies/:configName/test","type":0,"val":"proxies","end":""},{"old":"/proxies/:configName/test","type":1,"val":"configName","end":""},{"old":"/proxies/:configName/test","type":0,"val":"test","end":""}],
+    pattern: '/api/proxies/:configName/test',
+    tokens: [{"old":"/api/proxies/:configName/test","type":0,"val":"api","end":""},{"old":"/api/proxies/:configName/test","type":0,"val":"proxies","end":""},{"old":"/api/proxies/:configName/test","type":1,"val":"configName","end":""},{"old":"/api/proxies/:configName/test","type":0,"val":"test","end":""}],
     types: placeholder as Registry['api.proxies.test']['types'],
   },
   'configs.create': {

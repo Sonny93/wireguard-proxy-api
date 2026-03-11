@@ -9,7 +9,7 @@ export type ParamValue = string | number | bigint | boolean
 export interface Registry {
   'api.proxies.index': {
     methods: ["GET","HEAD"]
-    pattern: '/proxies'
+    pattern: '/api/proxies'
     types: {
       body: {}
       paramsTuple: []
@@ -21,7 +21,7 @@ export interface Registry {
   }
   'api.proxies.pick': {
     methods: ["GET","HEAD"]
-    pattern: '/proxies/pick'
+    pattern: '/api/proxies/pick'
     types: {
       body: {}
       paramsTuple: []
@@ -33,7 +33,7 @@ export interface Registry {
   }
   'api.proxies.test': {
     methods: ["GET","HEAD"]
-    pattern: '/proxies/:configName/test'
+    pattern: '/api/proxies/:configName/test'
     types: {
       body: {}
       paramsTuple: [ParamValue]
