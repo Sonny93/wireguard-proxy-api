@@ -4,22 +4,35 @@ import router from '@adonisjs/core/services/router';
 router
 	.group(() => {
 		router
-			.post('/start', [controllers.proxy.StartProxy, 'execute'])
+			.post('/start', [controllers.proxy.all.StartAllProxies, 'execute'])
 			.as('start');
-		router.post('/stop', [controllers.proxy.StopProxy, 'execute']).as('stop');
-		router.post('/test', [controllers.proxy.TestProxy, 'execute']).as('test');
 		router
-			.post('/restart', [controllers.proxy.RestartProxy, 'execute'])
+			.post('/stop', [controllers.proxy.all.StopAllProxies, 'execute'])
+			.as('stop');
+		router
+			.post('/restart', [controllers.proxy.all.RestartAllProxies, 'execute'])
 			.as('restart');
 		router
-			.post('/start-all', [controllers.proxy.StartAllProxies, 'execute'])
-			.as('startAll');
+			.post('/test', [controllers.proxy.all.TestAllProxies, 'execute'])
+			.as('test');
+	})
+	.prefix('/proxies/all')
+	.as('proxies.all');
+
+router
+	.group(() => {
 		router
-			.post('/stop-all', [controllers.proxy.StopAllProxies, 'execute'])
-			.as('stopAll');
+			.post('/:configId/start', [controllers.proxy.StartProxy, 'execute'])
+			.as('start');
 		router
-			.post('/restart-all', [controllers.proxy.RestartAllProxies, 'execute'])
-			.as('restartAll');
+			.post('/:configId/stop', [controllers.proxy.StopProxy, 'execute'])
+			.as('stop');
+		router
+			.post('/:configId/test', [controllers.proxy.TestProxy, 'execute'])
+			.as('test');
+		router
+			.post('/:configId/restart', [controllers.proxy.RestartProxy, 'execute'])
+			.as('restart');
 	})
 	.prefix('/proxies')
 	.as('proxies');

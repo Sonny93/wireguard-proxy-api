@@ -2,6 +2,7 @@ import { Data } from '@generated/data';
 import { router, useHttp } from '@inertiajs/react';
 import { Button } from '@minimalstuff/ui';
 import { useState } from 'react';
+import { urlFor } from '~/lib/tuyau';
 import { ActiveProxy } from '~/pages/home';
 
 type TestResult = { ok: true; ip: string } | { ok: false; error: string };
@@ -21,20 +22,24 @@ export function ConfigListItem({
 	const [testResult, setTestResult] = useState<TestResult | null>(null);
 
 	const startProxy = (configName: string) => {
-		router.post('/proxies/start', { configName }, { preserveScroll: true });
+		const startUrl = urlFor('proxies.start', { configId: config.id });
+		router.post(startUrl, { configName }, { preserveScroll: true });
 	};
 
 	const stopProxy = (configName: string) => {
-		router.post('/proxies/stop', { configName }, { preserveScroll: true });
+		const stopUrl = urlFor('proxies.stop', { configId: config.id });
+		router.post(stopUrl, { configName }, { preserveScroll: true });
 	};
 
 	const restartProxy = (configName: string) => {
-		router.post('/proxies/restart', { configName }, { preserveScroll: true });
+		const restartUrl = urlFor('proxies.restart', { configId: config.id });
+		router.post(restartUrl, { configName }, { preserveScroll: true });
 	};
 
 	const testProxy = () => {
 		setTestResult(null);
-		testHttp.post('/proxies/test', {
+		const testUrl = urlFor('proxies.test', { configId: config.id });
+		testHttp.post(testUrl, {
 			onSuccess: (response) => {
 				setTestResult(response as TestResult);
 			},
@@ -48,7 +53,8 @@ export function ConfigListItem({
 		activeProxies.find((p) => p.configName === configName);
 
 	const deleteConfig = (id: number) => {
-		router.delete(`/configs/${id}`, { preserveScroll: true });
+		const deleteUrl = urlFor('configs.destroy', { id });
+		router.delete(deleteUrl, { preserveScroll: true });
 	};
 
 	const proxy = getProxyForConfig(config.name);

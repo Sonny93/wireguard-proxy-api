@@ -9,13 +9,14 @@ export type ScannedRoutes = {
     'api.proxies.test': { paramsTuple: [ParamValue]; params: {'configName': ParamValue} }
     'configs.store': { paramsTuple?: []; params?: {} }
     'configs.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
-    'proxies.start': { paramsTuple?: []; params?: {} }
-    'proxies.stop': { paramsTuple?: []; params?: {} }
-    'proxies.test': { paramsTuple?: []; params?: {} }
-    'proxies.restart': { paramsTuple?: []; params?: {} }
-    'proxies.startAll': { paramsTuple?: []; params?: {} }
-    'proxies.stopAll': { paramsTuple?: []; params?: {} }
-    'proxies.restartAll': { paramsTuple?: []; params?: {} }
+    'proxies.all.start': { paramsTuple?: []; params?: {} }
+    'proxies.all.stop': { paramsTuple?: []; params?: {} }
+    'proxies.all.restart': { paramsTuple?: []; params?: {} }
+    'proxies.all.test': { paramsTuple?: []; params?: {} }
+    'proxies.start': { paramsTuple: [ParamValue]; params: {'configId': ParamValue} }
+    'proxies.stop': { paramsTuple: [ParamValue]; params: {'configId': ParamValue} }
+    'proxies.test': { paramsTuple: [ParamValue]; params: {'configId': ParamValue} }
+    'proxies.restart': { paramsTuple: [ParamValue]; params: {'configId': ParamValue} }
     'login': { paramsTuple?: []; params?: {} }
     'login.store': { paramsTuple?: []; params?: {} }
     'logout': { paramsTuple?: []; params?: {} }
@@ -40,13 +41,14 @@ export type ScannedRoutes = {
   }
   POST: {
     'configs.store': { paramsTuple?: []; params?: {} }
-    'proxies.start': { paramsTuple?: []; params?: {} }
-    'proxies.stop': { paramsTuple?: []; params?: {} }
-    'proxies.test': { paramsTuple?: []; params?: {} }
-    'proxies.restart': { paramsTuple?: []; params?: {} }
-    'proxies.startAll': { paramsTuple?: []; params?: {} }
-    'proxies.stopAll': { paramsTuple?: []; params?: {} }
-    'proxies.restartAll': { paramsTuple?: []; params?: {} }
+    'proxies.all.start': { paramsTuple?: []; params?: {} }
+    'proxies.all.stop': { paramsTuple?: []; params?: {} }
+    'proxies.all.restart': { paramsTuple?: []; params?: {} }
+    'proxies.all.test': { paramsTuple?: []; params?: {} }
+    'proxies.start': { paramsTuple: [ParamValue]; params: {'configId': ParamValue} }
+    'proxies.stop': { paramsTuple: [ParamValue]; params: {'configId': ParamValue} }
+    'proxies.test': { paramsTuple: [ParamValue]; params: {'configId': ParamValue} }
+    'proxies.restart': { paramsTuple: [ParamValue]; params: {'configId': ParamValue} }
     'login.store': { paramsTuple?: []; params?: {} }
     'logout': { paramsTuple?: []; params?: {} }
   }

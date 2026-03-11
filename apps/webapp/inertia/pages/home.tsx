@@ -3,6 +3,7 @@ import { Head, router } from '@inertiajs/react';
 import { Button } from '@minimalstuff/ui';
 import { ConfigList } from '~/components/configs/config_list';
 import { UploadConfigForm } from '~/components/configs/upload_config_form';
+import { urlFor } from '~/lib/tuyau';
 
 export type ActiveProxy = {
 	id: string;
@@ -21,15 +22,18 @@ export default function Home({
 	activeProxies = [],
 }: Readonly<HomeProps>) {
 	const startAll = () => {
-		router.post('/proxies/start-all', {}, { preserveScroll: true });
+		const startAllUrl = urlFor('proxies.all.start');
+		router.post(startAllUrl, {}, { preserveScroll: true });
 	};
 
 	const stopAll = () => {
-		router.post('/proxies/stop-all', {}, { preserveScroll: true });
+		const stopAllUrl = urlFor('proxies.all.stop');
+		router.post(stopAllUrl, {}, { preserveScroll: true });
 	};
 
 	const restartAll = () => {
-		router.post('/proxies/restart-all', {}, { preserveScroll: true });
+		const restartAllUrl = urlFor('proxies.all.restart');
+		router.post(restartAllUrl, {}, { preserveScroll: true });
 	};
 
 	return (

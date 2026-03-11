@@ -1,16 +1,14 @@
 import { ProxyService } from '#services/proxy_service';
-import { actionProxyValidator } from '#validators/proxy';
 import { inject } from '@adonisjs/core';
 import { HttpContext } from '@adonisjs/core/http';
 
 @inject()
-export default class StartProxyController {
+export default class StopAllProxiesController {
 	constructor(private readonly proxyService: ProxyService) {}
 
-	async execute({ request, response, auth }: HttpContext) {
-		const { params } = await request.validateUsing(actionProxyValidator);
+	async execute({ response, auth }: HttpContext) {
 		const user = auth.getUserOrFail();
-		await this.proxyService.startProxy(params.configId, user.id);
+		await this.proxyService.stopAllProxies(user.id);
 		return response.redirect().back();
 	}
 }

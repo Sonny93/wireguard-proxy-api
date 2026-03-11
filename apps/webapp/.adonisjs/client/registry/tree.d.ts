@@ -14,13 +14,16 @@ export interface ApiDefinition {
     destroy: typeof routes['configs.destroy']
   }
   proxies: {
+    all: {
+      start: typeof routes['proxies.all.start']
+      stop: typeof routes['proxies.all.stop']
+      restart: typeof routes['proxies.all.restart']
+      test: typeof routes['proxies.all.test']
+    }
     start: typeof routes['proxies.start']
     stop: typeof routes['proxies.stop']
     test: typeof routes['proxies.test']
     restart: typeof routes['proxies.restart']
-    startAll: typeof routes['proxies.startAll']
-    stopAll: typeof routes['proxies.stopAll']
-    restartAll: typeof routes['proxies.restartAll']
   }
   login: typeof routes['login'] & {
     store: typeof routes['login.store']

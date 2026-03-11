@@ -67,13 +67,61 @@ export interface Registry {
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/config/delete_config_controller').default['execute']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
-  'proxies.start': {
+  'proxies.all.start': {
     methods: ["POST"]
-    pattern: '/proxies/start'
+    pattern: '/proxies/all/start'
     types: {
-      body: ExtractBody<InferInput<(typeof import('#validators/proxy').actionProxyValidator)>>
+      body: {}
       paramsTuple: []
       params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/proxy/all/start_all_proxies_controller').default['execute']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/proxy/all/start_all_proxies_controller').default['execute']>>>
+    }
+  }
+  'proxies.all.stop': {
+    methods: ["POST"]
+    pattern: '/proxies/all/stop'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/proxy/all/stop_all_proxies_controller').default['execute']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/proxy/all/stop_all_proxies_controller').default['execute']>>>
+    }
+  }
+  'proxies.all.restart': {
+    methods: ["POST"]
+    pattern: '/proxies/all/restart'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/proxy/all/restart_all_proxies_controller').default['execute']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/proxy/all/restart_all_proxies_controller').default['execute']>>>
+    }
+  }
+  'proxies.all.test': {
+    methods: ["POST"]
+    pattern: '/proxies/all/test'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/proxy/all/test_all_proxies_controller').default['execute']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/proxy/all/test_all_proxies_controller').default['execute']>>>
+    }
+  }
+  'proxies.start': {
+    methods: ["POST"]
+    pattern: '/proxies/:configId/start'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/proxy').actionProxyValidator)>>
+      paramsTuple: [ParamValue]
+      params: { configId: ParamValue }
       query: ExtractQuery<InferInput<(typeof import('#validators/proxy').actionProxyValidator)>>
       response: ExtractResponse<Awaited<ReturnType<import('#controllers/proxy/start_proxy_controller').default['execute']>>>
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/proxy/start_proxy_controller').default['execute']>>> | { status: 422; response: { errors: SimpleError[] } }
@@ -81,11 +129,11 @@ export interface Registry {
   }
   'proxies.stop': {
     methods: ["POST"]
-    pattern: '/proxies/stop'
+    pattern: '/proxies/:configId/stop'
     types: {
       body: ExtractBody<InferInput<(typeof import('#validators/proxy').actionProxyValidator)>>
-      paramsTuple: []
-      params: {}
+      paramsTuple: [ParamValue]
+      params: { configId: ParamValue }
       query: ExtractQuery<InferInput<(typeof import('#validators/proxy').actionProxyValidator)>>
       response: ExtractResponse<Awaited<ReturnType<import('#controllers/proxy/stop_proxy_controller').default['execute']>>>
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/proxy/stop_proxy_controller').default['execute']>>> | { status: 422; response: { errors: SimpleError[] } }
@@ -93,11 +141,11 @@ export interface Registry {
   }
   'proxies.test': {
     methods: ["POST"]
-    pattern: '/proxies/test'
+    pattern: '/proxies/:configId/test'
     types: {
       body: ExtractBody<InferInput<(typeof import('#validators/proxy').actionProxyValidator)>>
-      paramsTuple: []
-      params: {}
+      paramsTuple: [ParamValue]
+      params: { configId: ParamValue }
       query: ExtractQuery<InferInput<(typeof import('#validators/proxy').actionProxyValidator)>>
       response: ExtractResponse<Awaited<ReturnType<import('#controllers/proxy/test_proxy_controller').default['execute']>>>
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/proxy/test_proxy_controller').default['execute']>>> | { status: 422; response: { errors: SimpleError[] } }
@@ -105,50 +153,14 @@ export interface Registry {
   }
   'proxies.restart': {
     methods: ["POST"]
-    pattern: '/proxies/restart'
+    pattern: '/proxies/:configId/restart'
     types: {
       body: ExtractBody<InferInput<(typeof import('#validators/proxy').actionProxyValidator)>>
-      paramsTuple: []
-      params: {}
+      paramsTuple: [ParamValue]
+      params: { configId: ParamValue }
       query: ExtractQuery<InferInput<(typeof import('#validators/proxy').actionProxyValidator)>>
       response: ExtractResponse<Awaited<ReturnType<import('#controllers/proxy/restart_proxy_controller').default['execute']>>>
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/proxy/restart_proxy_controller').default['execute']>>> | { status: 422; response: { errors: SimpleError[] } }
-    }
-  }
-  'proxies.startAll': {
-    methods: ["POST"]
-    pattern: '/proxies/start-all'
-    types: {
-      body: {}
-      paramsTuple: []
-      params: {}
-      query: {}
-      response: ExtractResponse<Awaited<ReturnType<import('#controllers/proxy/start_all_proxies_controller').default['execute']>>>
-      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/proxy/start_all_proxies_controller').default['execute']>>>
-    }
-  }
-  'proxies.stopAll': {
-    methods: ["POST"]
-    pattern: '/proxies/stop-all'
-    types: {
-      body: {}
-      paramsTuple: []
-      params: {}
-      query: {}
-      response: ExtractResponse<Awaited<ReturnType<import('#controllers/proxy/stop_all_proxies_controller').default['execute']>>>
-      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/proxy/stop_all_proxies_controller').default['execute']>>>
-    }
-  }
-  'proxies.restartAll': {
-    methods: ["POST"]
-    pattern: '/proxies/restart-all'
-    types: {
-      body: {}
-      paramsTuple: []
-      params: {}
-      query: {}
-      response: ExtractResponse<Awaited<ReturnType<import('#controllers/proxy/restart_all_proxies_controller').default['execute']>>>
-      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/proxy/restart_all_proxies_controller').default['execute']>>>
     }
   }
   'login': {
