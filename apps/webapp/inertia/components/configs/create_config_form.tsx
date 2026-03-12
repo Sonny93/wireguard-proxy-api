@@ -60,26 +60,33 @@ export function CreateConfigForm() {
 	};
 
 	return (
-		<form onSubmit={submit} className="flex flex-col gap-3">
+		<form onSubmit={submit} className="flex flex-col gap-4">
 			<div>
 				<label
 					htmlFor="configs"
-					className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
+					className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
 				>
 					Config files (.conf)
 				</label>
-				<input
-					id="configs"
-					name="configs"
-					type="file"
-					accept=".conf"
-					multiple
-					className="w-full text-sm text-gray-600 file:mr-4 file:rounded file:border-0 file:bg-blue-50 file:px-4 file:py-2 file:text-blue-700 dark:text-gray-400 dark:file:bg-blue-900/30 dark:file:text-blue-300"
-					onChange={handleFileChange}
-					ref={inputRef}
-				/>
+				<div className="rounded-lg border-2 border-dashed border-gray-200 bg-gray-50/50 px-4 py-6 transition-colors dark:border-gray-600 dark:bg-gray-800/30 has-[:focus]:border-blue-400 has-[:focus]:bg-blue-50/50 dark:has-[:focus]:border-blue-500 dark:has-[:focus]:bg-blue-900/20">
+					<input
+						id="configs"
+						name="configs"
+						type="file"
+						accept=".conf"
+						multiple
+						className="w-full text-sm text-gray-600 file:mr-4 file:rounded-md file:border-0 file:bg-blue-600 file:px-4 file:py-2 file:text-sm file:font-medium file:text-white file:transition-colors hover:file:bg-blue-700 dark:text-gray-400 dark:file:bg-blue-500 dark:hover:file:bg-blue-600"
+						onChange={handleFileChange}
+						ref={inputRef}
+					/>
+					{form.data.configs.length > 0 && (
+						<p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+							{form.data.configs.length} file(s) selected
+						</p>
+					)}
+				</div>
 				{fileErrors.length > 0 && (
-					<ul className="mt-1 list-disc pl-5 text-sm text-red-600 dark:text-red-400">
+					<ul className="mt-2 list-disc space-y-0.5 pl-5 text-sm text-red-600 dark:text-red-400">
 						{fileErrors.map((error) => (
 							<li key={error}>{error}</li>
 						))}
@@ -91,12 +98,11 @@ export function CreateConfigForm() {
 					type="submit"
 					variant="primary"
 					disabled={form.processing ?? fileErrors.length > 0}
-					fullWidth
 				>
 					{form.processing ? 'Adding…' : 'Add configs'}
 				</Button>
 				<Button
-					type="reset"
+					type="button"
 					variant="secondary"
 					disabled={form.data.configs.length === 0}
 					onClick={handleReset}

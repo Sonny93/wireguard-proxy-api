@@ -39,44 +39,73 @@ export default function Home({
 	return (
 		<>
 			<Head title="Homepage" />
-			<div className="flex flex-col gap-8">
-				<div>
-					<h1 className="mb-2 text-2xl font-semibold text-gray-900 dark:text-white">
+			<div className="flex flex-col gap-8 pb-8">
+				<header>
+					<h1 className="text-2xl font-semibold tracking-tight text-gray-900 dark:text-white sm:text-3xl">
 						Configs
 					</h1>
-					<p className="text-gray-600 dark:text-gray-300">
+					<p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
 						Add WireGuard configs by selecting .conf files. Content is stored in
 						your account.
 					</p>
-				</div>
-				<CreateConfigForm />
-				<div>
-					<div className="mb-2 flex flex-wrap items-center justify-between gap-2">
-						<h2 className="text-lg font-medium text-gray-900 dark:text-white">
+				</header>
+
+				<section className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800/50">
+					<h2 className="mb-4 text-sm font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+						Add configs
+					</h2>
+					<CreateConfigForm />
+				</section>
+
+				<section className="rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800/50">
+					<div className="flex flex-wrap items-center justify-between gap-4 border-b border-gray-200 px-6 py-4 dark:border-gray-700">
+						<h2 className="text-lg font-semibold text-gray-900 dark:text-white">
 							Stored configs & proxy workers
 						</h2>
 						{configs.length > 0 && (
 							<div className="flex flex-wrap gap-2">
-								<Button type="button" variant="primary" onClick={startAll}>
+								<Button
+									type="button"
+									variant="primary"
+									onClick={startAll}
+									size="sm"
+								>
 									Start all
 								</Button>
-								<Button type="button" variant="secondary" onClick={restartAll}>
+								<Button
+									type="button"
+									variant="secondary"
+									onClick={restartAll}
+									size="sm"
+								>
 									Restart all
 								</Button>
-								<Button type="button" variant="danger" onClick={stopAll}>
+								<Button
+									type="button"
+									variant="danger"
+									onClick={stopAll}
+									size="sm"
+								>
 									Stop all
 								</Button>
 							</div>
 						)}
 					</div>
-					{configs.length === 0 ? (
-						<p className="text-gray-500 dark:text-gray-400">
-							No config files yet.
-						</p>
-					) : (
-						<ConfigList configs={configs} activeProxies={activeProxies} />
-					)}
-				</div>
+					<div className="p-4 sm:p-6">
+						{configs.length === 0 ? (
+							<div className="flex flex-col items-center justify-center rounded-lg border border-dashed border-gray-200 py-12 dark:border-gray-600">
+								<p className="text-sm text-gray-500 dark:text-gray-400">
+									No config files yet.
+								</p>
+								<p className="mt-1 text-xs text-gray-400 dark:text-gray-500">
+									Add .conf files above to get started.
+								</p>
+							</div>
+						) : (
+							<ConfigList configs={configs} activeProxies={activeProxies} />
+						)}
+					</div>
+				</section>
 			</div>
 		</>
 	);

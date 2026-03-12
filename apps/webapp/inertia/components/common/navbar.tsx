@@ -11,19 +11,20 @@ type PageProps = {
 	user: User | undefined;
 };
 
-const AppLogo = () => <div className="h-auto w-30">App Logo</div>;
+const AppLogo = () => <span className="hidden sm:inline">WireGuard Proxy</span>;
 
 export const Navbar = () => {
 	const { user } = usePage().props as PageProps;
 	const { post, processing } = useForm();
 
 	return (
-		<nav className="flex h-[64px] max-w-[1920px] items-center justify-between rounded-md bg-white py-2 px-6 dark:bg-gray-800">
+		<nav className="flex h-14 items-center justify-between rounded-xl border border-gray-200 bg-white px-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 sm:px-6">
 			<div className="flex items-center gap-6">
 				<Link
 					href="/"
-					className="mr-6 flex-shrink-0 text-2xl text-gray-900 dark:text-white"
+					className="flex shrink-0 items-center gap-2 text-lg font-semibold text-gray-900 dark:text-white"
 				>
+					<span className="i-mdi:server-network w-6 h-6 text-blue-600 dark:text-blue-400" />
 					<AppLogo />
 				</Link>
 			</div>

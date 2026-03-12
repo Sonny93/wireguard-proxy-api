@@ -11,7 +11,7 @@ export const ConfigList = ({
 	configs,
 	activeProxies,
 }: Readonly<ConfigListProps>) => (
-	<ul className="flex flex-col gap-2">
+	<ul className="flex flex-col gap-3" role="list">
 		{configs.map((config) => (
 			<ConfigListItem
 				key={config.id}
