@@ -12,7 +12,13 @@ services:
       - apps/webapp/.env
     ports:
       - 3334:3333
+    networks:
+      - wireguard-proxy-network
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./apps/webapp/tmp:/app/tmp
       - ./storage/configs:/app/storage/configs
+
+networks:
+  wireguard-proxy-network:
+    name: wireguard-proxy-network

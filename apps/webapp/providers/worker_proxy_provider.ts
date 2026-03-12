@@ -25,6 +25,10 @@ export default class WorkerProxyProvider {
 		return port;
 	}
 
+	private resolveNetworkName(): string | undefined {
+		return env.get('PROXY_NETWORK_NAME');
+	}
+
 	private resolveGluetunEnv(): Record<string, string> {
 		return {
 			VPN_SERVICE_PROVIDER: env.get('VPN_SERVICE_PROVIDER', 'custom'),
@@ -43,6 +47,7 @@ export default class WorkerProxyProvider {
 				dockerSocketPath: this.resolveDockerSocketPath(),
 				proxyTestHost: this.resolveProxyTestHost(),
 				baseHostPort: this.resolveBaseHostPort(),
+				networkName: this.resolveNetworkName(),
 				gluetunEnv: this.resolveGluetunEnv(),
 				logger,
 			},
@@ -52,6 +57,8 @@ export default class WorkerProxyProvider {
 		app.container.singleton(HttpProxyClient, () => httpProxyClient);
 		app.container.singleton(ProxyWorkerService, () => proxyService);
 
+		await proxyService.ensureNetworkExists();
+
 		logger.info('Proxy workers use gluetun image', {
 			imageName: this.resolveImageName(),
 		});
@@ -59,11 +66,11 @@ export default class WorkerProxyProvider {
 
 	async ready() {
 		const proxyWorkerService = await app.container.make(ProxyWorkerService);
-		await proxyWorkerService.stopAll();
+		await proxyWorkerService.removeAll();
 	}
 
 	async shutdown() {
 		const proxyWorkerService = await app.container.make(ProxyWorkerService);
-		await proxyWorkerService.stopAll();
+		await proxyWorkerService.removeAll();
 	}
 }

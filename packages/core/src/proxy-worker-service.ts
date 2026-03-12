@@ -7,12 +7,14 @@ const GLUETUN_HTTP_PROXY_PORT = 8888;
 const CONTAINER_NAME_PREFIX = "proxy-";
 const TEST_PROXY_URL = "https://httpbin.org/ip";
 const TEST_PROXY_TIMEOUT_MS = 15_000;
+const ENABLE_CONTAINER_NETWORK = process.env.NODE_ENV === "production";
 
 export type ProxyWorkerOptions = {
 	imageName: string;
 	dockerSocketPath?: string;
 	proxyTestHost?: string;
 	baseHostPort?: number;
+	networkName?: string;
 	gluetunEnv: Record<string, string>;
 	logger?: Logger;
 };
@@ -29,8 +31,11 @@ export type TestProxyResult =
 	| { ok: false; error: string };
 
 function containerNameFromConfig(configName: string): string {
-	const safe = (configName || "default").replaceAll(/[^a-zA-Z0-9_-]/g, "-");
-	return `${CONTAINER_NAME_PREFIX}${safe}`;
+	const safe = (configName || "default")
+		.replaceAll(/[^a-zA-Z0-9-]/g, "-")
+		.replaceAll(/-+/g, "-")
+		.replaceAll(/^-|-$/g, "");
+	return `${CONTAINER_NAME_PREFIX}${safe ?? "default"}`;
 }
 
 function extractJsonStringField(body: string, field: string): string | null {
@@ -48,8 +53,6 @@ function extractJsonStringField(body: string, field: string): string | null {
 		return null;
 	}
 }
-
-type DockerMount = { Source: string; Destination: string };
 
 export class ProxyWorkerService {
 	readonly #docker: Docker;
@@ -125,17 +128,43 @@ export class ProxyWorkerService {
 		return Promise.all(containers.map((c) => this.#containerToActiveProxy(c)));
 	}
 
+	async #getContainerIPOnNetwork(containerId: string): Promise<string | null> {
+		const networkName = this.#options.networkName;
+		if (!networkName) return null;
+		const inspect = await this.#docker.getContainer(containerId).inspect();
+		const ip = inspect.NetworkSettings?.Networks?.[networkName]?.IPAddress;
+		return ip ?? null;
+	}
+
+	async getProxyHostAndPort(
+		proxy: ActiveProxy
+	): Promise<{ host: string; port: number }> {
+		if (ENABLE_CONTAINER_NETWORK && this.#options.networkName) {
+			const ip = await this.#getContainerIPOnNetwork(proxy.id);
+			if (!ip) {
+				throw new Error(
+					`Proxy container not on network ${this.#options.networkName}`
+				);
+			}
+			return { host: ip, port: GLUETUN_HTTP_PROXY_PORT };
+		}
+		return {
+			host: this.#options.proxyTestHost ?? "127.0.0.1",
+			port: proxy.port,
+		};
+	}
+
 	async testProxy(configName: string): Promise<TestProxyResult> {
 		const proxy = await this.#findProxyByConfig(configName);
 		if (!proxy) return { ok: false, error: "Proxy not running" };
 
-		const proxyHost = this.#options.proxyTestHost ?? "127.0.0.1";
-		this.#logger.debug("Testing proxy", { proxyPort: proxy.port, configName });
+		const { host, port } = await this.getProxyHostAndPort(proxy);
+		this.#logger.debug("Testing proxy", { host, port, configName });
 
 		try {
 			const body = await this.#httpProxyClient.get(
-				proxyHost,
-				proxy.port,
+				host,
+				port,
 				TEST_PROXY_URL,
 				TEST_PROXY_TIMEOUT_MS
 			);
@@ -147,11 +176,23 @@ export class ProxyWorkerService {
 		}
 	}
 
+	async ensureNetworkExists(): Promise<void> {
+		const name = this.#options.networkName;
+		if (!name) return;
+		const networks = await this.#docker.listNetworks({
+			filters: { name: [name] },
+		});
+		if (networks.some((n) => n.Name === name)) return;
+		this.#logger.info("Creating Docker network", { networkName: name });
+		await this.#docker.createNetwork({ Name: name });
+	}
+
 	async start(
 		configName: string,
 		wireguardPrivateKey: string
 	): Promise<ActiveProxy> {
 		await this.ensureImageReady();
+		await this.ensureNetworkExists();
 		const name = containerNameFromConfig(configName);
 		const existing = await this.#findContainersByName(name);
 		if (existing.length > 0) {
@@ -271,27 +312,33 @@ export class ProxyWorkerService {
 		const env = {
 			...this.#options.gluetunEnv,
 			HTTPPROXY: "on",
-			HTTPPROXY_LISTENING_ADDRESS: `:${GLUETUN_HTTP_PROXY_PORT}`,
+			HTTPPROXY_LISTENING_ADDRESS: `0.0.0.0:${GLUETUN_HTTP_PROXY_PORT}`,
 			WIREGUARD_PRIVATE_KEY: wireguardPrivateKey,
 			PROXY_CONFIG_NAME: configName,
 		};
 
+		const hostConfig: Docker.HostConfig = {
+			CapAdd: ["NET_ADMIN"],
+			Devices: [
+				{
+					PathOnHost: "/dev/net/tun",
+					PathInContainer: "/dev/net/tun",
+					CgroupPermissions: "rwm",
+				},
+			],
+			PortBindings: {
+				[`${GLUETUN_HTTP_PROXY_PORT}/tcp`]: [{ HostPort: String(hostPort) }],
+			},
+		};
+
+		if (ENABLE_CONTAINER_NETWORK && this.#options.networkName) {
+			hostConfig.NetworkMode = this.#options.networkName;
+		}
+
 		const container = await this.#docker.createContainer({
 			Image: this.#options.imageName,
 			name,
-			HostConfig: {
-				CapAdd: ["NET_ADMIN"],
-				Devices: [
-					{
-						PathOnHost: "/dev/net/tun",
-						PathInContainer: "/dev/net/tun",
-						CgroupPermissions: "rwm",
-					},
-				],
-				PortBindings: {
-					[`${GLUETUN_HTTP_PROXY_PORT}/tcp`]: [{ HostPort: String(hostPort) }],
-				},
-			},
+			HostConfig: hostConfig,
 			Env: Object.entries(env)
 				.filter(([, v]) => v !== undefined && v !== "")
 				.map(([k, v]) => `${k}=${v}`),

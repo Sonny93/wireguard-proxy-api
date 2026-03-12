@@ -9,6 +9,9 @@ prod:
 	@docker compose pull
 	@docker compose up -d --build --wait
 
+rm-network:
+	@docker network rm wireguard-proxy-network
+
 seed:
 	@cd {{ webapp_path }} && node ace db:seed
 

@@ -14,6 +14,9 @@ export default await Env.create(new URL('../', import.meta.url), {
 	DOCKER_SOCKET_PATH: Env.schema.string(),
 	PROXY_TEST_HOST: Env.schema.string(),
 	PROXY_BASE_HOST_PORT: Env.schema.string(),
+	PROXY_NETWORK_NAME: Env.schema.string.optionalWhen(
+		() => process.env.NODE_ENV !== 'production'
+	),
 
 	// Gluetun variables
 	GLUETUN_IMAGE_NAME: Env.schema.string(),
